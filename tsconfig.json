@@ -5,6 +5,6 @@
     "module": "NodeNext",
     "sourceMap": true,
     "moduleResolution": "NodeNext",
-    "target": "ES6"
+    "target": "ESNext"
   }
 }

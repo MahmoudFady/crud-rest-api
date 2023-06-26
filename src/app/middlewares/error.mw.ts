@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import ApiError from "../utils/error.uti";
+import ApiError from "../utils/error.util";
 
 export default (
   error: ApiError,
@@ -8,7 +8,7 @@ export default (
   next: NextFunction
 ) => {
   const { message, statusCode } = error;
-  res.status(statusCode).json({
+  res.status(statusCode || 500).json({
     message,
   });
 };
