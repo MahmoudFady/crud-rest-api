@@ -4,17 +4,12 @@ import * as fileUtil from "../utils/file.util";
 import path from "path";
 import fs from "fs";
 import userModel from "../models/user.model";
-export const updateImage = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const updateImage = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const imagePath = fileUtil.getUploadedFilePath(req, "users");
-    const data = await userModel
-      .findByIdAndUpdate(req.params["userId"], {
-        $set: { image: imagePath },
-      })
+    const data = await userModel.findByIdAndUpdate(req.params["userId"], {
+      $set: { image: imagePath },
+    })
       .select("image");
     if (!data) throw new ApiError("user does not exist", 404);
     fs.unlinkSync(
@@ -43,3 +38,28 @@ export const addOne = async (
     next(new ApiError(err.message, err.statusCode));
   }
 };
+
+export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const getUsers = await userModel.find({})
+    if (!getUsers) throw new ApiError("user not found", 404)
+    res.send(getUsers);
+  } catch (err) {
+    next(new ApiError(err.message, err.statusCode));
+  }
+}
+
+export const getOneUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId } = req.params
+    console.log(userId)
+    if (userId) {
+      const getUser = await userModel.findOne({ _id: userId })
+      console.log(getUser)
+      if (!getUser) throw new ApiError("user not found", 404)
+      res.send(getUser);
+    }
+  } catch (err) {
+    next(new ApiError(err.message, err.statusCode));
+  }
+}

@@ -7,4 +7,7 @@ const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
 );
 router.post("/", userImageMw, userController.addOne);
 router.patch("/img-upload/:userId", userImageMw, userController.updateImage);
+router.get("/list", userController.getAllUsers)
+router.get("/:userId", userController.getOneUser)
+
 export default router;
