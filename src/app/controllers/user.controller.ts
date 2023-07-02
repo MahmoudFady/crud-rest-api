@@ -53,10 +53,8 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 export const getOneUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { userId } = req.params
-    console.log(userId)
     if (userId) {
       const getUser = await userModel.findOne({ _id: userId })
-      console.log(getUser)
       if (!getUser) throw new ApiError("user not found", 404)
       res.send(getUser);
     }
