@@ -2,11 +2,11 @@
   "name": "crud-rest-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "tsc -w",
-    "start:dev": "nodemon ./dist/index"
+    "start:dev": "nodemon"
   },
   "author": "",
   "license": "ISC",
