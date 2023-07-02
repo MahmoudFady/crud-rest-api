@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../utils/error.util";
 import * as fileUtil from "../utils/file.util";
+import { resHandler } from "../utils/helper";
 import path from "path";
 import fs from "fs";
 import userModel from "../models/user.model";
@@ -61,5 +62,25 @@ export const getOneUser = async (req: Request, res: Response, next: NextFunction
     }
   } catch (err) {
     next(new ApiError(err.message, err.statusCode));
+  }
+}
+
+  export const editUser = async(req:Request, res:Response, next:NextFunction) => {
+    try {
+        const user = await userModel.findOneAndUpdate({ _id: req.params.id }, {...req.body })
+        if (!user) throw new ApiError("user does not exist", 404);
+        resHandler(res, 200, true, " ", "data updated")
+    } catch (err) {
+        next(new ApiError(err.message, err.statusCode));
+    }
+}
+
+export const deleteUser = async(req:Request, res:Response, next:NextFunction) => {
+  try {
+      const user = await userModel.deleteOne({ _id: req.params.id })
+      if (!user) throw new ApiError("user does not exist", 404);
+      resHandler(res, 200, true, " ", "user deleted")
+  } catch (err) {
+      next(new ApiError(err.message, err.statusCode));
   }
 }
