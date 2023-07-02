@@ -9,7 +9,7 @@ router.post("/", userImageMw, userController.addOne);
 router.patch("/img-upload/:userId", userImageMw, userController.updateImage);
 router.get("/list", userController.getAllUsers)
 router.get("/:userId", userController.getOneUser)
-router.patch("/editUser",userController.editUser);
-router.delete("/deleteUser",userController.deleteUser);
+router.patch("/editUser/:id",userController.editUser);
+router.delete("/deleteUser/:id",userController.deleteUser);
 
 export default router;
