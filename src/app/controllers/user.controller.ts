@@ -5,12 +5,19 @@ import { resHandler } from "../utils/helper";
 import path from "path";
 import fs from "fs";
 import userModel from "../models/user.model";
-export const updateImage = async (req: Request, res: Response, next: NextFunction) => {
+import userValidSchema from "../validation/user.validation";
+import * as sharedValidSchema from "../validation/shared.vlaidation";
+export const updateImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const imagePath = fileUtil.getUploadedFilePath(req, "users");
-    const data = await userModel.findByIdAndUpdate(req.params["userId"], {
-      $set: { image: imagePath },
-    })
+    const data = await userModel
+      .findByIdAndUpdate(req.params["userId"], {
+        $set: { image: imagePath },
+      })
       .select("image");
     if (!data) throw new ApiError("user does not exist", 404);
     fs.unlinkSync(
@@ -29,6 +36,8 @@ export const addOne = async (
   next: NextFunction
 ) => {
   try {
+    // const result = userValidSchema.validate(req.body);
+    // if (result.error) throw new ApiError("invalid data", 409);
     const { ssn, email } = req.body;
     const usersList = await userModel.find({ $or: [{ ssn }, { email }] });
     if (usersList.length > 0) throw new ApiError("user already exist", 409);
@@ -40,45 +49,68 @@ export const addOne = async (
   }
 };
 
-export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const getUsers = await userModel.find({})
-    if (!getUsers) throw new ApiError("user not found", 404)
+    const getUsers = await userModel.find({});
+    if (!getUsers) throw new ApiError("user not found", 404);
     res.send(getUsers);
   } catch (err) {
     next(new ApiError(err.message, err.statusCode));
   }
-}
+};
 
-export const getOneUser = async (req: Request, res: Response, next: NextFunction) => {
+export const getOneUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const { userId } = req.params
+    const { userId } = req.params;
     if (userId) {
-      const getUser = await userModel.findOne({ _id: userId })
-      if (!getUser) throw new ApiError("user not found", 404)
+      const getUser = await userModel.findOne({ _id: userId });
+      if (!getUser) throw new ApiError("user not found", 404);
       res.send(getUser);
     }
   } catch (err) {
     next(new ApiError(err.message, err.statusCode));
   }
-}
+};
 
-  export const editUser = async(req:Request, res:Response, next:NextFunction) => {
-    try {
-        const user = await userModel.findOneAndUpdate({ _id: req.params.id }, {...req.body })
-        if (!user) throw new ApiError("user does not exist", 404);
-        resHandler(res, 200, true, " ", "data updated")
-    } catch (err) {
-        next(new ApiError(err.message, err.statusCode));
-    }
-}
-
-export const deleteUser = async(req:Request, res:Response, next:NextFunction) => {
+export const editUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-      const user = await userModel.deleteOne({ _id: req.params.id })
-      if (!user) throw new ApiError("user does not exist", 404);
-      resHandler(res, 200, true, " ", "user deleted")
+    const ValidResult = userValidSchema.validate(req.body);
+    if (ValidResult.error) throw new ApiError("onvalid data", 409);
+    const user = await userModel.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body
+    );
+    if (!user) throw new ApiError("user does not exist", 404);
+    resHandler(res, 200, true, " ", "data updated");
   } catch (err) {
-      next(new ApiError(err.message, err.statusCode));
+    next(new ApiError(err.message, err.statusCode));
   }
-}
+};
+
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const validResult = sharedValidSchema.mongoIdSchema.validate(req.params.id);
+    if (validResult.error) throw new ApiError("in valid user id", 409);
+    const user = await userModel.deleteOne({ _id: req.params.id });
+    if (!user) throw new ApiError("user does not exist", 404);
+    resHandler(res, 200, true, " ", "user deleted");
+  } catch (err) {
+    next(new ApiError(err.message, err.statusCode));
+  }
+};
