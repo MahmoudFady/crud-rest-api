@@ -5,6 +5,8 @@ import userModel from "../models/user.model";
 import ApiError from "../utils/error.util";
 import resUtil from "../utils/response.util";
 import * as fileUtil from "../utils/file.util";
+import DbFactory from "../db/factory.db";
+const userDbFactory = new DbFactory(userModel);
 export const updateImage = async (
   req: Request,
   res: Response,
