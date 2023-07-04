@@ -80,7 +80,7 @@ export const editUser = async (
 ) => {
   try {
     const user = await userModel.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.userId },
       req.body
     );
     if (!user) resUtil(res, "NOT_FOUND", "user does not exist");

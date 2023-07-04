@@ -6,12 +6,14 @@ import validationMw from "../middlewares/validation.mw";
 const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
   "image"
 );
-router.post(
-  "/",
-  userImageMw,
-  (req, res, next) => validationMw(next, ["user", req.body]),
-  userController.addOne
-);
+router
+  .route("/")
+  .post(
+    userImageMw,
+    (req, res, next) => validationMw(next, ["user", req.body]),
+    userController.addOne
+  )
+  .get(userController.getAllUsers);
 router.patch(
   "/img-upload/:userId",
   userImageMw,
@@ -23,34 +25,14 @@ router.patch(
     ),
   userController.updateImage
 );
-
-router.get("/list", userController.getAllUsers);
-
-router.get(
-  "/:userId",
-  (req, res, next) => validationMw(next, ["mongoId", req.params.userId]),
-  userController.getOneUser
-);
-
-router.patch(
-  "/editUser/:id",
-  (req, res, next) =>
-    validationMw(
-      next,
-      ["mongoId", req.params.userId],
-      ["file", req.body.image]
-    ),
-  userController.editUser
-);
-router.delete(
-  "/deleteUser/:id",
-  (req, res, next) =>
-    validationMw(
-      next,
-      ["mongoId", req.params.userId],
-      ["file", req.body.image]
-    ),
-  userController.deleteUser
-);
+router
+  .route("/:userId")
+  .all((req, res, next) => validationMw(next, ["mongoId", req.params.userId]))
+  .get(userController.getOneUser)
+  .patch(
+    (req, res, next) => validationMw(next, ["user", req.body]),
+    userController.editUser
+  )
+  .delete(userController.deleteUser);
 
 export default router;
