@@ -1,12 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import ApiError from "../utils/error.util";
-import * as fileUtil from "../utils/file.util";
-import { resHandler } from "../utils/helper";
 import path from "path";
 import fs from "fs";
 import userModel from "../models/user.model";
-import userValidSchema from "../validation/user.validation";
-import * as sharedValidSchema from "../validation/shared.vlaidation";
+import ApiError from "../utils/error.util";
+import resUtil from "../utils/response.util";
+import * as fileUtil from "../utils/file.util";
 export const updateImage = async (
   req: Request,
   res: Response,
@@ -36,14 +34,12 @@ export const addOne = async (
   next: NextFunction
 ) => {
   try {
-    // const result = userValidSchema.validate(req.body);
-    // if (result.error) throw new ApiError("invalid data", 409);
     const { ssn, email } = req.body;
     const usersList = await userModel.find({ $or: [{ ssn }, { email }] });
     if (usersList.length > 0) throw new ApiError("user already exist", 409);
     req.body["image"] = fileUtil.getUploadedFilePath(req, "users");
     const user = await new userModel(req.body).save();
-    res.status(200).json({ message: "user added", data: { user } });
+    resUtil(res, "OK", "created", { user });
   } catch (err) {
     next(new ApiError(err.message, err.statusCode));
   }
@@ -55,9 +51,8 @@ export const getAllUsers = async (
   next: NextFunction
 ) => {
   try {
-    const getUsers = await userModel.find({});
-    if (!getUsers) throw new ApiError("user not found", 404);
-    res.send(getUsers);
+    const users = await userModel.find({});
+    resUtil(res, "OK", "users are founed", { users });
   } catch (err) {
     next(new ApiError(err.message, err.statusCode));
   }
@@ -70,13 +65,11 @@ export const getOneUser = async (
 ) => {
   try {
     const { userId } = req.params;
-    if (userId) {
-      const getUser = await userModel.findOne({ _id: userId });
-      if (!getUser) throw new ApiError("user not found", 404);
-      res.send(getUser);
-    }
+    const user = await userModel.findById(userId);
+    if (!user) resUtil(res, "NOT_FOUND", "user does not exist");
+    resUtil(res, "OK", "user founed ", { user });
   } catch (err) {
-    next(new ApiError(err.message, err.statusCode));
+    next(new ApiError(err.message));
   }
 };
 
@@ -86,16 +79,14 @@ export const editUser = async (
   next: NextFunction
 ) => {
   try {
-    const ValidResult = userValidSchema.validate(req.body);
-    if (ValidResult.error) throw new ApiError("onvalid data", 409);
     const user = await userModel.findOneAndUpdate(
       { _id: req.params.id },
       req.body
     );
-    if (!user) throw new ApiError("user does not exist", 404);
-    resHandler(res, 200, true, " ", "data updated");
+    if (!user) resUtil(res, "NOT_FOUND", "user does not exist");
+    resUtil(res, "OK", "updated");
   } catch (err) {
-    next(new ApiError(err.message, err.statusCode));
+    next(new ApiError(err.message));
   }
 };
 
@@ -105,12 +96,11 @@ export const deleteUser = async (
   next: NextFunction
 ) => {
   try {
-    const validResult = sharedValidSchema.mongoIdSchema.validate(req.params.id);
-    if (validResult.error) throw new ApiError("in valid user id", 409);
-    const user = await userModel.deleteOne({ _id: req.params.id });
-    if (!user) throw new ApiError("user does not exist", 404);
-    resHandler(res, 200, true, " ", "user deleted");
+    const result = await userModel.deleteOne({ _id: req.params.id });
+    if (result.deletedCount === 0)
+      resUtil(res, "NOT_FOUND", "user does not exist");
+    resUtil(res, "OK", "user deleted");
   } catch (err) {
-    next(new ApiError(err.message, err.statusCode));
+    next(new ApiError(err.message));
   }
 };
