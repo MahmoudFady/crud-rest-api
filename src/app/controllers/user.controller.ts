@@ -5,8 +5,6 @@ import userModel from "../models/user.model";
 import ApiError from "../utils/error.util";
 import resUtil from "../utils/response.util";
 import * as fileUtil from "../utils/file.util";
-import DbFactory from "../db/factory.db";
-const userDbFactory = new DbFactory(userModel);
 export const updateImage = async (
   req: Request,
   res: Response,
@@ -98,9 +96,8 @@ export const deleteUser = async (
   next: NextFunction
 ) => {
   try {
-    const result = await userModel.deleteOne({ _id: req.params.id });
-    if (result.deletedCount === 0)
-      resUtil(res, "NOT_FOUND", "user does not exist");
+    const result = await userModel.findByIdAndDelete(req.params.id);
+    if (!result) resUtil(res, "NOT_FOUND", "user does not exist");
     resUtil(res, "OK", "user deleted");
   } catch (err) {
     next(new ApiError(err.message));
