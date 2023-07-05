@@ -13,7 +13,7 @@ export const updateImage = async (
   try {
     const imagePath = fileUtil.getUploadedFilePath(req, "users");
     const data = await userModel
-      .findByIdAndUpdate(req.params["userId"], {
+      .findByIdAndUpdate(req.params["id"], {
         $set: { image: imagePath },
       })
       .select("image");
@@ -34,9 +34,6 @@ export const addOne = async (
   next: NextFunction
 ) => {
   try {
-    const { ssn, email } = req.body;
-    const usersList = await userModel.find({ $or: [{ ssn }, { email }] });
-    if (usersList.length > 0) throw new ApiError("user already exist", 409);
     req.body["image"] = fileUtil.getUploadedFilePath(req, "users");
     const user = await new userModel(req.body).save();
     resUtil(res, "OK", "created", { user });

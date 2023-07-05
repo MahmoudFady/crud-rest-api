@@ -1,5 +1,8 @@
 import { Router } from "express";
 const router = Router();
+import userModel from "../models/user.model";
+import ControllerFactroy from "../controllers/factroy.controller";
+const userCtrlFactory = new ControllerFactroy(userModel);
 import fileUpload from "../middlewares/file-upload.mw";
 import * as userController from "../controllers/user.controller";
 import validationMw from "../middlewares/validation.mw";
@@ -11,28 +14,24 @@ router
   .post(
     userImageMw,
     (req, res, next) => validationMw(next, ["user", req.body]),
-    userController.addOne
+    userCtrlFactory.create
   )
-  .get(userController.getAllUsers);
+  .get(userCtrlFactory.getAll);
 router.patch(
-  "/img-upload/:userId",
+  "/img-upload/:id",
   userImageMw,
   (req, res, next) =>
-    validationMw(
-      next,
-      ["mongoId", req.params.userId],
-      ["file", req.body.image]
-    ),
+    validationMw(next, ["mongoId", req.params.id], ["file", req.body.image]),
   userController.updateImage
 );
 router
-  .route("/:userId")
-  .all((req, res, next) => validationMw(next, ["mongoId", req.params.userId]))
-  .get(userController.getOneUser)
+  .route("/:id")
+  .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]))
+  .get(userCtrlFactory.getById)
   .patch(
     (req, res, next) => validationMw(next, ["user", req.body]),
-    userController.editUser
+    userCtrlFactory.updateById
   )
-  .delete(userController.deleteUser);
+  .delete(userCtrlFactory.deleteById);
 
 export default router;

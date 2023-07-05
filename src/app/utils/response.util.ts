@@ -5,8 +5,8 @@ export default (
   res: Response,
   status: httpResStatus,
   message: string,
-  data: { [key: string]: any } = null
+  result: { [key: string]: any } = null
 ) => {
   const statusCode = httpStatusCode[status];
-  return res.status(statusCode).json({ message, data });
+  return res.status(statusCode).json({ message, result });
 };

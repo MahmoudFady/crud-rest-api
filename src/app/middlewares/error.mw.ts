@@ -8,7 +8,7 @@ export default (
   next: NextFunction
 ) => {
   const { message, statusCode } = error;
-  res.status(statusCode || 500).json({
+  res.status(500).json({
     message,
   });
 };
