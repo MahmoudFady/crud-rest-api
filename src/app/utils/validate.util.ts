@@ -10,8 +10,8 @@ const validateString = (
     ...target,
   };
   if (val.length < criteria.min) throw "filed min length " + criteria.min;
-  else if (val.length > criteria.max) throw "filed max length " + criteria.max;
+  if (val.length > criteria.max) throw "filed max length " + criteria.max;
   else if (!criteria.regex.test(val)) throw "filed is invalid";
-  else return val;
+  return val;
 };
 export { validateString };

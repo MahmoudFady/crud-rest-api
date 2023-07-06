@@ -15,7 +15,7 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
+    unique: [true,'email must be unique'],
   },
   ssn: {
     type: Number,

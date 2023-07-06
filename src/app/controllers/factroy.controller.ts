@@ -11,10 +11,11 @@ class ControllerFactroy<T extends Document | any> {
   }
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.file)
-        req.body["image"] = fileUtil.getUploadedFilePath(req, req.url);
-      const user = await new this.Model(req.body).save();
-      resUtil(res, "OK", "created", { user });
+      if (req.file) {
+        req.body["image"] = fileUtil.getUploadedFilePath(req);
+      }
+      const data = await new this.Model(req.body).save();
+      resUtil(res, "OK", "created", { data });
     } catch (err) {
       next(new ApiError(err.message, err.statusCode));
     }

@@ -5,11 +5,11 @@ export default Joi.object({
   image: fileSchema.optional(),
   firstName: Joi.custom((val) => validUtil.validateString(val, {})),
   middleName: Joi.custom((val) => validUtil.validateString(val, {})),
-  thirdName: Joi.string().custom((val) => validUtil.validateString(val, {})),
+  thirdName: Joi.custom((val) => validUtil.validateString(val, {})),
   email: Joi.string().email().required(),
   ssn: Joi.number().custom((val) => {
     if (new String(val).length === 14) return val;
-    throw "ssn must be number of 14 digits";
+    throw "ssn must be a number of 14 digits";
   }),
   birthDate: Joi.date()
     .required()

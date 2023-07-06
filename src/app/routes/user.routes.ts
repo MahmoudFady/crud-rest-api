@@ -20,8 +20,7 @@ router
 router.patch(
   "/img-upload/:id",
   userImageMw,
-  (req, res, next) =>
-    validationMw(next, ["mongoId", req.params.id], ["file", req.body.image]),
+  (req, res, next) => validationMw(next, ["mongoId", req.params.id]),
   userController.updateImage
 );
 router

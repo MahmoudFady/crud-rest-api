@@ -1,0 +1,315 @@
+{
+	"info": {
+		"_postman_id": "571d9c3f-ea35-46b5-946f-ee2ff491662a",
+		"name": "crud-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11009364"
+	},
+	"item": [
+		{
+			"name": "users list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/users/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/mahmoud/Desktop/nymar.jpeg"
+						},
+						{
+							"key": "firstName",
+							"value": "mahmoud",
+							"type": "text"
+						},
+						{
+							"key": "middleName",
+							"value": "ali",
+							"type": "text"
+						},
+						{
+							"key": "thirdName",
+							"value": "ali",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "ssn",
+							"value": "12369874123698",
+							"type": "text"
+						},
+						{
+							"key": "birthDate",
+							"value": "Thu Jan 01 1970 02:00:02 GMT+0200 (Eastern European Standard Time)",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "nasir city , cairo , egypt",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "male",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patch one user id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/mahmoud/Desktop/nymar.jpeg"
+						},
+						{
+							"key": "firstName",
+							"value": "mahmoud",
+							"type": "text"
+						},
+						{
+							"key": "middleName",
+							"value": "ali",
+							"type": "text"
+						},
+						{
+							"key": "thirdName",
+							"value": "ali",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "ssn",
+							"value": "12369874123698",
+							"type": "text"
+						},
+						{
+							"key": "birthDate",
+							"value": "Thu Jan 01 1970 02:00:02 GMT+0200 (Eastern European Standard Time)",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "nasir city , cairo , egypt",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "male",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "del user id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/mahmoud/Desktop/nymar.jpeg"
+						},
+						{
+							"key": "firstName",
+							"value": "mahmoud",
+							"type": "text"
+						},
+						{
+							"key": "middleName",
+							"value": "ali",
+							"type": "text"
+						},
+						{
+							"key": "thirdName",
+							"value": "ali",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "ssn",
+							"value": "12369874123698",
+							"type": "text"
+						},
+						{
+							"key": "birthDate",
+							"value": "Thu Jan 01 1970 02:00:02 GMT+0200 (Eastern European Standard Time)",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "nasir city , cairo , egypt",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "male",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users/:userId",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						":userId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "64a6b438eb978ac79a93b6ea"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one user id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/users/:userId",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						":userId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "64a2c9383679c9029cfc52ca"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patch user image",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/mahmoud/Desktop/nymar.jpeg"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users/img-upload/:userId",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"img-upload",
+						":userId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "64a6b765a8d3ad548fe9867e"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

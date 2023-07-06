@@ -11,7 +11,7 @@ export const updateImage = async (
   next: NextFunction
 ) => {
   try {
-    const imagePath = fileUtil.getUploadedFilePath(req, "users");
+    const imagePath = fileUtil.getUploadedFilePath(req);
     const data = await userModel
       .findByIdAndUpdate(req.params["id"], {
         $set: { image: imagePath },
@@ -34,7 +34,7 @@ export const addOne = async (
   next: NextFunction
 ) => {
   try {
-    req.body["image"] = fileUtil.getUploadedFilePath(req, "users");
+    req.body["image"] = fileUtil.getUploadedFilePath(req);
     const user = await new userModel(req.body).save();
     resUtil(res, "OK", "created", { user });
   } catch (err) {
