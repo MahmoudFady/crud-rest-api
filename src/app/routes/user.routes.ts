@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import userModel from "../models/user.model";
-import ControllerFactroy from "../controllers/factroy.controller";
+import ControllerFactroy from "../controllers/factory.controller";
 const userCtrlFactory = new ControllerFactroy(userModel);
 import fileUpload from "../middlewares/file-upload.mw";
 import * as userController from "../controllers/user.controller";
@@ -9,6 +9,7 @@ import validationMw from "../middlewares/validation.mw";
 const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
   "image"
 );
+router.get("/options", userCtrlFactory.getOptions);
 router
   .route("/")
   .post(
@@ -16,7 +17,7 @@ router
     (req, res, next) => validationMw(next, ["user", req.body]),
     userCtrlFactory.create
   )
-  .get(userCtrlFactory.getAll);
+  .get(userCtrlFactory.getAll("image firstName"));
 router.patch(
   "/img-upload/:id",
   userImageMw,
@@ -26,11 +27,11 @@ router.patch(
 router
   .route("/:id")
   .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]))
-  .get(userCtrlFactory.getById)
+  .get(userCtrlFactory.getById("id"))
   .patch(
     (req, res, next) => validationMw(next, ["user", req.body]),
-    userCtrlFactory.updateById
+    userCtrlFactory.updateById("id")
   )
-  .delete(userCtrlFactory.deleteById);
+  .delete(userCtrlFactory.deleteById("id"));
 
 export default router;
