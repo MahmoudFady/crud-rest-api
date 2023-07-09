@@ -3,6 +3,7 @@ import { fileSchema } from "./shared.vlaidation";
 import * as validUtil from "../utils/validate.util";
 export default Joi.object({
   image: fileSchema.optional(),
+  idImage: fileSchema.optional(),
   firstName: Joi.custom((val) => validUtil.validateString(val, {})),
   middleName: Joi.custom((val) => validUtil.validateString(val, {})),
   thirdName: Joi.custom((val) => validUtil.validateString(val, {})),

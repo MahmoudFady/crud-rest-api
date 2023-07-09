@@ -13,11 +13,13 @@ class ControllerFactroy<T extends Document | any> {
   }
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.file) {
-        req.body["image"] = fileUtil.getUploadedFilePath(req);
-      }
-      const data = await new this.Model(req.body).save();
-      resUtil(res, "OK", "created", { data });
+      console.log(req.files);
+      // if (req.file) {
+      //   req.body["image"] = fileUtil.getUploadedFilePath(req);
+      // }
+      // const data = await this.serviceFactory.create(req.body);
+      // resUtil(res, "OK", "created", { data });
+      res.status(200).json({ message: "saved" });
     } catch (err) {
       next(new ApiError(err.message, err.statusCode));
     }

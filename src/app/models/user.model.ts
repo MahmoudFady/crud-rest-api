@@ -4,6 +4,7 @@ const userSchema = new Schema({
     type: String,
     default: "",
   },
+  idImage: { type: Buffer },
   firstName: {
     type: String,
   },
@@ -15,7 +16,7 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    unique: [true,'email must be unique'],
+    unique: [true, "email must be unique"],
   },
   ssn: {
     type: Number,

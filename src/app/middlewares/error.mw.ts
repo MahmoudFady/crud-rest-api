@@ -8,6 +8,7 @@ export default (
   next: NextFunction
 ) => {
   const { message, statusCode } = error;
+  console.log(error);
   res.status(500).json({
     message,
   });
