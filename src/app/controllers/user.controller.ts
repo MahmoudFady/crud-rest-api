@@ -1,12 +1,8 @@
-import { Request, Response, NextFunction, json } from "express";
+import { Request, Response, NextFunction } from "express";
 import ApiError from "../utils/error.util";
-import * as fileUtil from "../utils/file.util";
 import * as userService from "../services/user.service";
 import responseUtil from "../utils/response.util";
 import fileUploadHandlerUtil from "../utils/file-upload-handler.util";
-import path from "path";
-import fs from "fs";
-import userModel from "../models/user.model";
 export const create = async (
   req: Request,
   res: Response,

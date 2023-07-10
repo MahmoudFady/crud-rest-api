@@ -1,6 +1,5 @@
 import path from "path";
 import userModel from "../models/user.model";
-import ApiError from "../utils/error.util";
 import fs from "fs";
 const create = (data: any) => {
   return new userModel(data).save();
