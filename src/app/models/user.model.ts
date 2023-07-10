@@ -4,7 +4,6 @@ const userSchema = new Schema({
     type: String,
     default: "",
   },
-  idImage: { type: Buffer },
   firstName: {
     type: String,
   },

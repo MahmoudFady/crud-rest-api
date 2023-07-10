@@ -15,7 +15,7 @@ router
   .post(
     userImageMw,
     (req, res, next) => validationMw(next, ["user", req.body]),
-    userCtrlFactory.create
+    userController.create
   )
   .get(userCtrlFactory.getAll("image firstName"));
 router.patch(

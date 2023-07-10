@@ -1,9 +1,11 @@
 import { createLogger, transports } from "winston";
+import path from "path";
 import expressWinston from "express-winston";
 const logger = createLogger({
   transports: [
-    new transports.Console(),
-    new transports.File({ filename: "logfile.log" }),
+    new transports.File({
+      filename: path.join(__dirname, "../../../logs", "logfile.log"),
+    }),
   ],
 });
 const loggingMw = expressWinston.logger({
