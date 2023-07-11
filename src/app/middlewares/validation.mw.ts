@@ -1,10 +1,9 @@
 import { NextFunction } from "express";
 import validation from "../validation/index.validation";
 import ApiError from "../utils/error.util";
+import joiSchema from "../types/joi-schema.type";
 
-type JoiSchemes = "user" | "mongoId" | "file";
-
-export default (next: NextFunction, ...input: [JoiSchemes, any][]) => {
+export default (next: NextFunction, ...input: [joiSchema, any][]) => {
   for (let [schema, target] of input) {
     const { error } = validation(schema, target);
 

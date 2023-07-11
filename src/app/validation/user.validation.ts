@@ -1,9 +1,8 @@
-import Joi, { string } from "joi";
+import Joi from "joi";
 import { fileSchema } from "./shared.vlaidation";
 import * as validUtil from "../utils/validate.util";
-export default Joi.object({
+const addUser = Joi.object({
   image: fileSchema.optional(),
-  idImage: fileSchema.optional(),
   firstName: Joi.custom((val) => validUtil.validateString(val, {})),
   middleName: Joi.custom((val) => validUtil.validateString(val, {})),
   thirdName: Joi.custom((val) => validUtil.validateString(val, {})),
@@ -21,3 +20,7 @@ export default Joi.object({
   address: Joi.string().min(10).required(),
   gender: Joi.string().valid("male", "female").required(),
 });
+const updateUser = addUser.fork(Object.keys(addUser.describe().keys), (field) =>
+  field.optional()
+);
+export { addUser, updateUser };

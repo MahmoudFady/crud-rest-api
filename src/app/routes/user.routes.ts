@@ -14,7 +14,7 @@ router
   .route("/")
   .post(
     userImageMw,
-    (req, res, next) => validationMw(next, ["user", req.body]),
+    (req, res, next) => validationMw(next, ["addUser", req.body]),
     userController.create
   )
   .get(userCtrlFactory.getAll("image firstName"));
@@ -29,7 +29,7 @@ router
   .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]))
   .get(userCtrlFactory.getById("id"))
   .patch(
-    (req, res, next) => validationMw(next, ["user", req.body]),
+    (req, res, next) => validationMw(next, ["updateUser", req.body]),
     userCtrlFactory.updateById("id")
   )
   .delete(userCtrlFactory.deleteById("id"));

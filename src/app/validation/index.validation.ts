@@ -1,10 +1,15 @@
-import userValidation from "./user.validation";
+import { addUser, updateUser } from "./user.validation";
 import * as shardValid from "./shared.vlaidation";
+import joiSchema from "../types/joi-schema.type";
 const joiSchmes = {
-  user: userValidation,
+  addUser,
+  updateUser,
   mongoId: shardValid.mongoIdSchema,
   file: shardValid.fileSchema,
 };
-export default (joiSchema: "user" | "mongoId" | "file", target: any) => {
+export default (
+  joiSchema: joiSchema,
+  target: any
+) => {
   return joiSchmes[joiSchema].validate(target);
 };
