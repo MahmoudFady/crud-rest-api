@@ -6,7 +6,7 @@ import * as fileUtil from "../utils/file.util";
 import ServiceFactory from "../services/factory.service";
 class ControllerFactroy<T extends Document | any> {
   private successMsg = "data fetched successfully";
-  private noDataMsg = "this data doesn't exist";
+  private noDataMsg = "data doesn't exist";
   serviceFactory: ServiceFactory<T>;
   constructor(private Model: Model<T>) {
     this.serviceFactory = new ServiceFactory(this.Model);
@@ -54,7 +54,7 @@ class ControllerFactroy<T extends Document | any> {
           req.body
         );
         if (!data) resUtil(res, "NOT_FOUND", this.noDataMsg);
-        resUtil(res, "OK", this.successMsg);
+        resUtil(res, "OK", "data updated successfully", { data: req.body });
       } catch (err) {
         next(new ApiError(err.message));
       }
@@ -67,7 +67,7 @@ class ControllerFactroy<T extends Document | any> {
           req.params[paramName]
         );
         if (!result) resUtil(res, "NOT_FOUND", this.noDataMsg);
-        resUtil(res, "OK", this.successMsg);
+        resUtil(res, "OK", "data deleted successfully");
       } catch (err) {
         next(new ApiError(err.message));
       }
