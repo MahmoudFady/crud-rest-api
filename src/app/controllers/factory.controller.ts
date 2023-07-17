@@ -30,6 +30,7 @@ class ControllerFactroy<T extends Document | any> {
       try {
         const data = await this.serviceFactory.getAll(projection);
         resUtil(res, "OK", this.successMsg, { data });
+        console.log(res);
       } catch (err) {
         next(new ApiError(err));
       }
@@ -74,10 +75,14 @@ class ControllerFactroy<T extends Document | any> {
     };
   getOptions = (req: Request, res: Response, next: NextFunction) => {
     const schemaPaths = this.Model.schema.paths;
+    console.log(this.Model.schema.obj);
     const attributes = {};
     for (const path in schemaPaths) {
       if (schemaPaths.hasOwnProperty(path)) {
-        attributes[path] = schemaPaths[path].instance;
+        attributes[path] = {
+          type: schemaPaths[path].instance,
+          options: this.Model.schema.obj[path]?.options,
+        };
       }
     }
     resUtil(res, "OK", "entity options", { attributes });

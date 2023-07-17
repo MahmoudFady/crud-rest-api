@@ -7,6 +7,8 @@ export default (
   message: string,
   result: { [key: string]: any } = null
 ) => {
+  res.locals.message = message;
+  res.locals.result = JSON.stringify(result)
   const statusCode = httpStatusCode[status];
   return res.status(statusCode).json({ message, result });
 };

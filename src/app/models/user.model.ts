@@ -1,11 +1,12 @@
 import mongoose, { Schema } from "mongoose";
+import * as modelValidation from "./validation";
 const userSchema = new Schema({
   image: {
     type: String,
-    default: "",
   },
   firstName: {
     type: String,
+    options: modelValidation.stringValidation("first name"),
   },
   middleName: {
     type: String,
@@ -16,6 +17,7 @@ const userSchema = new Schema({
   email: {
     type: String,
     unique: [true, "email must be unique"],
+    options: modelValidation.stringValidation("user email"),
   },
   ssn: {
     type: Number,
