@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "571d9c3f-ea35-46b5-946f-ee2ff491662a",
+		"_postman_id": "4ea6eb30-6c9d-4b79-97b3-72338876aabc",
 		"name": "crud-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "11009364"
@@ -12,7 +12,27 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/v1/users/",
+					"raw": "localhost:8080/api/v1/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users options",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/users/options",
 					"host": [
 						"localhost"
 					],
@@ -21,7 +41,7 @@
 						"api",
 						"v1",
 						"users",
-						""
+						"options"
 					]
 				}
 			},
@@ -38,7 +58,7 @@
 						{
 							"key": "image",
 							"type": "file",
-							"src": "/home/mahmoud/Desktop/nymar.jpeg"
+							"src": "/home/mahmoud/Desktop/messi.jpeg"
 						},
 						{
 							"key": "firstName",
@@ -57,12 +77,12 @@
 						},
 						{
 							"key": "email",
-							"value": "test2@gmail.com",
+							"value": "test21@gmail.com",
 							"type": "text"
 						},
 						{
 							"key": "ssn",
-							"value": "12369874123698",
+							"value": "12369874123695",
 							"type": "text"
 						},
 						{
@@ -79,6 +99,12 @@
 							"key": "gender",
 							"value": "male",
 							"type": "text"
+						},
+						{
+							"key": "idImage",
+							"type": "file",
+							"src": "/home/mahmoud/Desktop/messi.jpeg",
+							"disabled": true
 						}
 					]
 				},
@@ -104,57 +130,17 @@
 				"method": "PATCH",
 				"header": [],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "image",
-							"type": "file",
-							"src": "/home/mahmoud/Desktop/nymar.jpeg"
-						},
+					"mode": "urlencoded",
+					"urlencoded": [
 						{
 							"key": "firstName",
-							"value": "mahmoud",
-							"type": "text"
-						},
-						{
-							"key": "middleName",
-							"value": "ali",
-							"type": "text"
-						},
-						{
-							"key": "thirdName",
-							"value": "ali",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "test2@gmail.com",
-							"type": "text"
-						},
-						{
-							"key": "ssn",
-							"value": "12369874123698",
-							"type": "text"
-						},
-						{
-							"key": "birthDate",
-							"value": "Thu Jan 01 1970 02:00:02 GMT+0200 (Eastern European Standard Time)",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "nasir city , cairo , egypt",
-							"type": "text"
-						},
-						{
-							"key": "gender",
-							"value": "male",
+							"value": "hussin",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/users/",
+					"raw": "localhost:8080/api/v1/users/:id",
 					"host": [
 						"localhost"
 					],
@@ -163,7 +149,13 @@
 						"api",
 						"v1",
 						"users",
-						""
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "64ad49a3ab9a840b93faa643"
+						}
 					]
 				}
 			},
@@ -239,7 +231,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "64a6b438eb978ac79a93b6ea"
+							"value": "64ad49a3ab9a840b93faa643"
 						}
 					]
 				}
@@ -266,7 +258,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "64a2c9383679c9029cfc52ca"
+							"value": "64ac11940330a1e1dcdb574d"
 						}
 					]
 				}
@@ -283,8 +275,8 @@
 					"formdata": [
 						{
 							"key": "image",
-							"type": "file",
-							"src": "/home/mahmoud/Desktop/nymar.jpeg"
+							"value": "",
+							"type": "text"
 						}
 					]
 				},
@@ -304,8 +296,63 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "64a6b765a8d3ad548fe9867e"
+							"value": "64ad49a3ab9a840b93faa643"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/mahmoud/Desktop/images.jpeg"
+						},
+						{
+							"key": "title",
+							"value": "i love cr7",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/posts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/posts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"posts"
 					]
 				}
 			},
