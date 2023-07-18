@@ -6,14 +6,12 @@ import fileUploadHandlerMw from "../utils/file-upload-handler.util";
 router.post(
   "/",
   fileUploadMw("uploads/posts", [".jpeg"]).single("image"),
-  async (req, res) => {
+  async function (req, res){
     try {
       const { title } = req.body;
       const image = fileUploadHandlerMw(req, "database");
-      console.log(image);
       const post = new Post({ title, image });
       await post.save();
-
       res.status(201).json(post);
     } catch (error) {
       console.error(error);
@@ -24,7 +22,6 @@ router.post(
 router.get("/", async (req, res) => {
   try {
     const posts = await Post.find();
-
     res.status(201).json(posts);
   } catch (error) {
     console.error(error);

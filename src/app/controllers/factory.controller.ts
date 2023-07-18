@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { Model, Document } from "mongoose";
 import resUtil from "../utils/response.util";
 import ApiError from "../utils/error.util";
-import * as fileUtil from "../utils/file.util";
 import ServiceFactory from "../services/factory.service";
 class ControllerFactroy<T extends Document | any> {
   private successMsg = "data fetched successfully";
@@ -13,10 +12,6 @@ class ControllerFactroy<T extends Document | any> {
   }
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.files);
-      if (req.file) {
-        req.body["image"] = fileUtil.getUploadedFilePath(req);
-      }
       const data = await this.serviceFactory.create(req.body);
       resUtil(res, "OK", "created", { data });
       res.status(200).json({ message: "saved" });
@@ -30,7 +25,6 @@ class ControllerFactroy<T extends Document | any> {
       try {
         const data = await this.serviceFactory.getAll(projection);
         resUtil(res, "OK", this.successMsg, { data });
-        console.log(res);
       } catch (err) {
         next(new ApiError(err));
       }
@@ -75,7 +69,6 @@ class ControllerFactroy<T extends Document | any> {
     };
   getOptions = (req: Request, res: Response, next: NextFunction) => {
     const schemaPaths = this.Model.schema.paths;
-    console.log(this.Model.schema.obj);
     const attributes = {};
     for (const path in schemaPaths) {
       if (schemaPaths.hasOwnProperty(path)) {
