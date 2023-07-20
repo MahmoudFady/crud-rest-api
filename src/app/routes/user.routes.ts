@@ -9,6 +9,7 @@ import validationMw from "../middlewares/validation.mw";
 const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
   "image"
 );
+router.get("/template/form", userCtrlFactory.getFormTemplate);
 router.get("/options", userCtrlFactory.getOptions);
 router
   .route("/")

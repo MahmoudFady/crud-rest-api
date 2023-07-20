@@ -69,18 +69,32 @@ class ControllerFactroy<T extends Document | any> {
         next(new ApiError(err.message));
       }
     };
-  getOptions = (req: Request, res: Response, next: NextFunction) => {
+  getModelFields = () => {
     const schemaPaths = this.Model.schema.paths;
-    const attributes = {};
+    const attributes = [];
     for (const path in schemaPaths) {
-      if (schemaPaths.hasOwnProperty(path)) {
-        attributes[path] = {
+      if (schemaPaths.hasOwnProperty(path) && path != "_id" && path !== "__v") {
+        attributes.push({
+          name: path,
           type: schemaPaths[path].instance,
           options: this.Model.schema.obj[path]?.options,
-        };
+        });
       }
     }
+    return attributes;
+  };
+  getOptions = (req: Request, res: Response, next: NextFunction) => {
+    const attributes = this.getModelFields();
     resUtil(req, res, "OK", "entity options", { attributes });
+  };
+  getFormTemplate = (req: Request, res: Response, next: NextFunction) => {
+    const fields = req.query.fields as string[];
+    const attributes = fields
+      ? this.getModelFields().filter((field) => {
+          return fields.includes(field.name);
+        })
+      : this.getModelFields();
+    resUtil(req, res, "OK", "entity template form", { fields: attributes });
   };
 }
 export default ControllerFactroy;
