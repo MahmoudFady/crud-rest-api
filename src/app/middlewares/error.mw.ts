@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../utils/error.util";
 import vars from "../config/variables.config";
-import * as loggingUtil  from '../utils/logging.util'
+import * as loggingUtil from "../utils/logging.util";
 export default (
   error: ApiError,
   req: Request,
@@ -12,9 +12,9 @@ export default (
   res.locals.message = message;
   loggingUtil.error(
     `
-  ${req.protocol} | ${req.method} | ${JSON.stringify(req.body)} |${
-      req.originalUrl
-    } |${message}`
+  ${req.protocol} | ${req.method}| ${res.statusCode} | ${JSON.stringify(
+      req.body
+    )} |${req.originalUrl} |${message}`
   );
   if (vars.NODE_ENV === "dev")
     res.status(statusCode).json({

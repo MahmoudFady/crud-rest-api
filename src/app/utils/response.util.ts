@@ -14,9 +14,9 @@ export default (
   const statusCode = httpStatusCode[status];
   loggingUtil.info(
     `
-  ${req.protocol} | ${req.method} | ${JSON.stringify(req.body)} |${
-      req.originalUrl
-    } |${message}`,
+  ${req.protocol} | ${req.method} | ${res.statusCode} | ${JSON.stringify(
+      req.body
+    )} |${req.originalUrl} |${message}`,
     result
   );
   return res.status(statusCode).json({ message, result });
