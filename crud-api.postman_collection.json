@@ -48,6 +48,34 @@
 			"response": []
 		},
 		{
+			"name": "get user form tem",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/users/template/form?fields=email,ssn",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"template",
+						"form"
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "email,ssn"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "add user",
 			"request": {
 				"method": "POST",
@@ -239,10 +267,63 @@
 			"response": []
 		},
 		{
-			"name": "one user id",
+			"name": "get use by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/mahmoud/Desktop/nymar.jpeg"
+						},
+						{
+							"key": "firstName",
+							"value": "mahmoud",
+							"type": "text"
+						},
+						{
+							"key": "middleName",
+							"value": "ali",
+							"type": "text"
+						},
+						{
+							"key": "thirdName",
+							"value": "ali",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "ssn",
+							"value": "12369874123698",
+							"type": "text"
+						},
+						{
+							"key": "birthDate",
+							"value": "Thu Jan 01 1970 02:00:02 GMT+0200 (Eastern European Standard Time)",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "nasir city , cairo , egypt",
+							"type": "text"
+						},
+						{
+							"key": "gender",
+							"value": "male",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
 					"raw": "localhost:8080/api/v1/users/:userId",
 					"host": [
@@ -258,7 +339,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "64ac11940330a1e1dcdb574d"
+							"value": "64aeccfd1d392d95012bfa37"
 						}
 					]
 				}
@@ -344,7 +425,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/v1/posts",
+					"raw": "localhost:8080/api/v1/posts/comments",
 					"host": [
 						"localhost"
 					],
@@ -352,7 +433,8 @@
 					"path": [
 						"api",
 						"v1",
-						"posts"
+						"posts",
+						"comments"
 					]
 				}
 			},
