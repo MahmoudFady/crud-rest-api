@@ -14,7 +14,6 @@ router.post(
       await post.save();
       res.status(201).json(post);
     } catch (error) {
-      console.error(error);
       res.status(500).json({ error: "Failed to create a new post" });
     }
   }
@@ -24,7 +23,6 @@ router.get("/", async (req, res) => {
     const posts = await Post.find();
     res.status(201).json(posts);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to create a new post" });
   }
 });

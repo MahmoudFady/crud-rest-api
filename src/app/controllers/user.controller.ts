@@ -32,6 +32,6 @@ export const updateImage = async (
       data: { _id: data._id, image: imagePath },
     });
   } catch (err) {
-    next(new ApiError(err.message, err.statusCode));
+    next(new ApiError(err.message, err.status));
   }
 };

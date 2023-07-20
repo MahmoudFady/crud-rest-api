@@ -11,8 +11,7 @@ export default (
   const { message, statusCode } = error;
   res.locals.message = message;
   loggingUtil.error(
-    `
-  ${req.protocol} | ${req.method}| ${res.statusCode} | ${JSON.stringify(
+    `${req.protocol} | ${req.method}| ${statusCode} | body :  ${JSON.stringify(
       req.body
     )} |${req.originalUrl} |${message}`
   );
