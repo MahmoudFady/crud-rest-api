@@ -13,7 +13,7 @@ class ControllerFactroy<T extends Document | any> {
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = await this.serviceFactory.create(req.body);
-      resUtil(res, "OK", "created", { data });
+      resUtil(req, res, "OK", "created", { data });
       res.status(200).json({ message: "saved" });
     } catch (err) {
       next(new ApiError(err.message, err.statusCode));
@@ -24,7 +24,7 @@ class ControllerFactroy<T extends Document | any> {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const data = await this.serviceFactory.getAll(projection);
-        resUtil(res, "OK", this.successMsg, { data });
+        resUtil(req, res, "OK", this.successMsg, { data });
       } catch (err) {
         next(new ApiError(err));
       }
@@ -34,8 +34,8 @@ class ControllerFactroy<T extends Document | any> {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const data = await this.serviceFactory.getById(req.params[paramName]);
-        if (!data) resUtil(res, "NOT_FOUND", this.noDataMsg);
-        resUtil(res, "OK", this.successMsg, { data });
+        if (!data) resUtil(req, res, "NOT_FOUND", this.noDataMsg);
+        resUtil(req, res, "OK", this.successMsg, { data });
       } catch (err) {
         next(new ApiError(err.message));
       }
@@ -48,8 +48,10 @@ class ControllerFactroy<T extends Document | any> {
           req.params[paramName],
           req.body
         );
-        if (!data) resUtil(res, "NOT_FOUND", this.noDataMsg);
-        resUtil(res, "OK", "data updated successfully", { data: req.body });
+        if (!data) resUtil(req, res, "NOT_FOUND", this.noDataMsg);
+        resUtil(req, res, "OK", "data updated successfully", {
+          data: req.body,
+        });
       } catch (err) {
         next(new ApiError(err.message));
       }
@@ -61,8 +63,8 @@ class ControllerFactroy<T extends Document | any> {
         const result = await this.serviceFactory.deleteById(
           req.params[paramName]
         );
-        if (!result) resUtil(res, "NOT_FOUND", this.noDataMsg);
-        resUtil(res, "OK", "data deleted successfully");
+        if (!result) resUtil(req, res, "NOT_FOUND", this.noDataMsg);
+        resUtil(req, res, "OK", "data deleted successfully");
       } catch (err) {
         next(new ApiError(err.message));
       }
@@ -78,7 +80,7 @@ class ControllerFactroy<T extends Document | any> {
         };
       }
     }
-    resUtil(res, "OK", "entity options", { attributes });
+    resUtil(req, res, "OK", "entity options", { attributes });
   };
 }
 export default ControllerFactroy;

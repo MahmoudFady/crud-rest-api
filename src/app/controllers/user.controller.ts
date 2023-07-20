@@ -11,7 +11,7 @@ export const create = async (
   try {
     req.body["image"] = fileUploadHandlerUtil(req, "filesystem");
     const data = await userService.create(req.body);
-    responseUtil(res, "OK", "user created", { data });
+    responseUtil(req,res, "OK", "user created", { data });
   } catch (err) {
     next(new ApiError(err.message, err.statusCode));
   }
@@ -27,8 +27,8 @@ export const updateImage = async (
       req.params["id"],
       imagePath as string
     );
-    if (!data) responseUtil(res, "NOT_FOUND", "user does not exist");
-    responseUtil(res, "OK", "user image updated successfully", {
+    if (!data) responseUtil(req, res, "NOT_FOUND", "user does not exist");
+    responseUtil(req, res, "OK", "user image updated successfully", {
       data: { _id: data._id, image: imagePath },
     });
   } catch (err) {

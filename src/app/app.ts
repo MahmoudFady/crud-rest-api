@@ -10,11 +10,9 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
-app.use(loggingMw("info"));
 app.use("/uploads", express.static(path.join(__dirname, "../", "uploads")));
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
-app.use(loggingMw("error"));
 app.use(notFoundMw);
 app.use(errorMw);
 
