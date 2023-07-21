@@ -4,8 +4,6 @@ const stringCriteria = {
   required: true,
 };
 const numberCriteria = {
-  minDigits: 5,
-  maxDigits: 14,
   required: true,
 };
 export { stringCriteria, numberCriteria };

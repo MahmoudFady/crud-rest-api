@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import * as modelValidation from "./validation";
 import fieldGenratorBusiness from "../business/field-genrator.business";
 const userSchema = new Schema({
   image: {
@@ -41,7 +40,7 @@ const userSchema = new Schema({
     options: fieldGenratorBusiness("national id", {
       placehoalder: "ex : 12345678912345",
       controlType: "number",
-      validation: { minDigits: 14 },
+      validation: { digitsCount: 14 },
     }),
   },
   birthDate: {
@@ -49,7 +48,6 @@ const userSchema = new Schema({
     options: fieldGenratorBusiness("birth date", {
       placehoalder: "ex : 20/5/2023",
       controlType: "date",
-      validation: { minDate: new Date() },
     }),
   },
   address: {
@@ -64,7 +62,7 @@ const userSchema = new Schema({
     options: fieldGenratorBusiness("gender", {
       placehoalder: "ex : male",
       controlType: "radio",
-      values: ["male", "females"],
+      values: ["male", "female"],
     }),
   },
 });
