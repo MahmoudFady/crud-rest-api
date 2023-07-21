@@ -4,7 +4,7 @@ const userSchema = new Schema({
   image: {
     type: String,
     options: fieldGenratorBusiness("profile image", {
-      placehoalder: "",
+      placehoalder: "user image",
       controlType: "file",
     }),
   },
@@ -12,18 +12,30 @@ const userSchema = new Schema({
     type: String,
     options: fieldGenratorBusiness("first name", {
       placehoalder: "ex : mahmoud",
+      validation: {
+        minLength: 5,
+        maxLength: 10,
+      },
     }),
   },
   middleName: {
     type: String,
     options: fieldGenratorBusiness("middle name", {
       placehoalder: "ex : fady",
+      validation: {
+        minLength: 5,
+        maxLength: 10,
+      },
     }),
   },
   thirdName: {
     type: String,
     options: fieldGenratorBusiness("third name", {
       placehoalder: "ex : ameen",
+      validation: {
+        minLength: 5,
+        maxLength: 10,
+      },
     }),
   },
   email: {
@@ -54,6 +66,7 @@ const userSchema = new Schema({
     type: String,
     options: fieldGenratorBusiness("address", {
       placehoalder: "ex : abasia , cairo , egypt",
+      validation: { minLength: 8 },
     }),
   },
   gender: {

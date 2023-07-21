@@ -1,11 +1,3 @@
-import {
-  numberCriteria,
-  stringCriteria,
-} from "../config/field-validation.config";
-const validationCriteria = {
-  text: stringCriteria,
-  number: numberCriteria,
-};
 export default (
   label: string,
   options: {
@@ -21,12 +13,7 @@ export default (
     control: "input",
     controlType: "text",
     ...options,
-    validation: options.validation
-      ? {
-          ...validationCriteria[options.controlType || "text"],
-          ...options.validation,
-        }
-      : validationCriteria[options.controlType || "text"],
+    validation: options.validation,
   };
   return fieldOptions;
 };
