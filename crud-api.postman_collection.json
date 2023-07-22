@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4ea6eb30-6c9d-4b79-97b3-72338876aabc",
+		"_postman_id": "7952fbc3-41d1-423a-b551-48ae3c5f3931",
 		"name": "crud-api",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11009364"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25510894"
 	},
 	"item": [
 		{
@@ -11,18 +11,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "localhost:8080/api/v1/users",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"users"
-					]
-				}
+				"url": "localhost:8080/api/v1/users"
 			},
 			"response": []
 		},
@@ -31,19 +20,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "localhost:8080/api/v1/users/options",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"users",
-						"options"
-					]
-				}
+				"url": "localhost:8080/api/v1/users/options"
 			},
 			"response": []
 		},
@@ -136,19 +113,7 @@
 						}
 					]
 				},
-				"url": {
-					"raw": "localhost:8080/api/v1/users/",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"users",
-						""
-					]
-				}
+				"url": "localhost:8080/api/v1/users/"
 			},
 			"response": []
 		},
@@ -404,18 +369,7 @@
 						}
 					]
 				},
-				"url": {
-					"raw": "localhost:8080/api/v1/posts",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"posts"
-					]
-				}
+				"url": "localhost:8080/api/v1/posts"
 			},
 			"response": []
 		},
@@ -424,8 +378,17 @@
 			"request": {
 				"method": "GET",
 				"header": [],
+				"url": "localhost:8080/api/v1/posts/comments"
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"request": {
+				"method": "POST",
+				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/v1/posts/comments",
+					"raw": "localhost:8080/api/v1/users/search?gender=male",
 					"host": [
 						"localhost"
 					],
@@ -433,8 +396,14 @@
 					"path": [
 						"api",
 						"v1",
-						"posts",
-						"comments"
+						"users",
+						"search"
+					],
+					"query": [
+						{
+							"key": "gender",
+							"value": "male"
+						}
 					]
 				}
 			},
