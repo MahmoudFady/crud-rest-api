@@ -3,6 +3,7 @@ import { Model, Document } from "mongoose";
 import resUtil from "../utils/response.util";
 import ApiError from "../utils/error.util";
 import ServiceFactory from "../services/factory.service";
+import modelOptionsUtil from "../utils/get-model-options.util";
 class ControllerFactroy<T extends Document | any> {
   private successMsg = "data fetched successfully";
   private noDataMsg = "data doesn't exist";
@@ -70,18 +71,7 @@ class ControllerFactroy<T extends Document | any> {
       }
     };
   getModelFields = () => {
-    const schemaPaths = this.Model.schema.paths;
-    const attributes = [];
-    for (const path in schemaPaths) {
-      if (schemaPaths.hasOwnProperty(path) && path != "_id" && path !== "__v") {
-        attributes.push({
-          name: path,
-          type: schemaPaths[path].instance,
-          options: this.Model.schema.obj[path]?.options,
-        });
-      }
-    }
-    return attributes;
+    return modelOptionsUtil(this.Model);
   };
   getOptions = (req: Request, res: Response, next: NextFunction) => {
     const attributes = this.getModelFields();

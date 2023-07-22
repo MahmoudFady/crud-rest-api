@@ -1,47 +1,47 @@
 import mongoose, { Schema } from "mongoose";
-import fieldGenratorBusiness from "../business/field-genrator.business";
+import optionsGeneratorUtil from "../utils/options-genrator.util";
 const userSchema = new Schema({
   image: {
     type: String,
-    options: fieldGenratorBusiness("profile image", {
+    options: optionsGeneratorUtil("profile image", {
       placehoalder: "user image",
       controlType: "file",
     }),
   },
   firstName: {
     type: String,
-    options: fieldGenratorBusiness("first name", {
+    options: optionsGeneratorUtil("first name", {
       placehoalder: "ex : mahmoud",
       validation: {
-        minLength: 5,
-        maxLength: 10,
+        min: 5,
+        max: 10,
       },
     }),
   },
   middleName: {
     type: String,
-    options: fieldGenratorBusiness("middle name", {
+    options: optionsGeneratorUtil("middle name", {
       placehoalder: "ex : fady",
       validation: {
-        minLength: 5,
-        maxLength: 10,
+        min: 5,
+        max: 10,
       },
     }),
   },
   thirdName: {
     type: String,
-    options: fieldGenratorBusiness("third name", {
+    options: optionsGeneratorUtil("third name", {
       placehoalder: "ex : ameen",
       validation: {
-        minLength: 5,
-        maxLength: 10,
+        min: 2,
+        max: 10,
       },
     }),
   },
   email: {
     type: String,
-    unique: [true, "email must be unique"],
-    options: fieldGenratorBusiness("user email", {
+    unique: true,
+    options: optionsGeneratorUtil("user email", {
       placehoalder: "ex : xyz@ex.com",
       controlType: "email",
     }),
@@ -49,33 +49,41 @@ const userSchema = new Schema({
   ssn: {
     type: Number,
     unique: true,
-    options: fieldGenratorBusiness("national id", {
+    validate: {
+      validator: function (val: number) {
+        return new String(val).length == 14;
+      },
+      message: ({ value }) => `${value} isn't valid!`,
+    },
+    options: optionsGeneratorUtil("national id", {
       placehoalder: "ex : 12345678912345",
       controlType: "number",
-      validation: { digitsCount: 14 },
+      validation: { length: 14 },
     }),
   },
   birthDate: {
     type: Date,
-    options: fieldGenratorBusiness("birth date", {
+    options: optionsGeneratorUtil("birth date", {
       placehoalder: "ex : 20/5/2023",
       controlType: "date",
     }),
   },
   address: {
     type: String,
-    options: fieldGenratorBusiness("address", {
+    options: optionsGeneratorUtil("address", {
       placehoalder: "ex : abasia , cairo , egypt",
-      validation: { minLength: 8 },
+      validation: { min: 8 },
     }),
   },
   gender: {
     type: String,
-    enum: ["male", "female"],
-    options: fieldGenratorBusiness("gender", {
+    options: optionsGeneratorUtil("gender", {
       placehoalder: "ex : male",
       controlType: "radio",
       values: ["male", "female"],
+      validation: {
+        valid: ["male", "female"],
+      },
     }),
   },
 });
