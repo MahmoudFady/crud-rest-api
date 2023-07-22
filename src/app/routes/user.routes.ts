@@ -1,8 +1,8 @@
 import { Router } from "express";
 const router = Router();
 import userModel from "../models/user.model";
-import ControllerFactroy from "../controllers/factory.controller";
-const userCtrlFactory = new ControllerFactroy(userModel);
+import ControllerFactory from "../controllers/factory.controller";
+const userCtrlFactory = new ControllerFactory(userModel);
 import fileUpload from "../middlewares/file-upload.mw";
 import * as userController from "../controllers/user.controller";
 import validationMw from "../middlewares/validation.mw";
@@ -10,6 +10,7 @@ const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
   "image"
 );
 router.get("/template/form", userCtrlFactory.getFormTemplate);
+router.route("/search").post(userCtrlFactory.search("", ["gender", "ssn"]));
 router.get("/options", userCtrlFactory.getOptions);
 router
   .route("/")
@@ -25,6 +26,7 @@ router.patch(
   (req, res, next) => validationMw(next, ["mongoId", req.params.id]),
   userController.updateImage
 );
+
 router
   .route("/:id")
   .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]))

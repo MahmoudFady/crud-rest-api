@@ -1,8 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../utils/error.util";
 import * as userService from "../services/user.service";
+import ServiceFactory from "../services/factory.service";
 import responseUtil from "../utils/response.util";
 import fileUploadHandlerUtil from "../utils/file-upload-handler.util";
+import userModel from "../models/user.model";
+
+const serviceFac = new ServiceFactory(userModel);
+
 export const create = async (
   req: Request,
   res: Response,
@@ -11,7 +16,7 @@ export const create = async (
   try {
     req.body["image"] = fileUploadHandlerUtil(req, "filesystem");
     const data = await userService.create(req.body);
-    responseUtil(req,res, "OK", "user created", { data });
+    responseUtil(req, res, "OK", "user created", { data });
   } catch (err) {
     next(new ApiError(err.message, err.statusCode));
   }

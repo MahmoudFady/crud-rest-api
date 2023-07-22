@@ -3,7 +3,7 @@ export default (
   options: {
     control?: string;
     controlType?: string;
-    placehoalder: string;
+    placeholder: string;
     values?: string[];
     validation?: { [key: string]: any };
   }

@@ -4,7 +4,7 @@ import resUtil from "../utils/response.util";
 import ApiError from "../utils/error.util";
 import ServiceFactory from "../services/factory.service";
 import modelOptionsUtil from "../utils/get-model-options.util";
-class ControllerFactroy<T extends Document | any> {
+class ControllerFactory<T extends Document | any> {
   private successMsg = "data fetched successfully";
   private noDataMsg = "data doesn't exist";
   serviceFactory: ServiceFactory<T>;
@@ -86,5 +86,22 @@ class ControllerFactroy<T extends Document | any> {
       : this.getModelFields();
     resUtil(req, res, "OK", "entity template form", { fields: attributes });
   };
+
+  search =
+    (projection = "", exceptions = []) =>
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        let criteria = {};
+        for (let k in req.body) {
+          criteria[k] = new RegExp(req.body[k], "i");
+          if (exceptions.includes(k)) criteria[k] = req.body[k];
+        }
+        const data = await this.serviceFactory.getAll(projection, criteria);
+        resUtil(req, res, "OK", "done", { data });
+      } catch (err) {
+        next(new ApiError(err.message, err.status));
+      }
+    };
 }
-export default ControllerFactroy;
+
+export default ControllerFactory;

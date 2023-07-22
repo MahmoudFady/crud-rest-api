@@ -6,8 +6,8 @@ class ServiceFactory<T extends Document | any> {
   create = (data: any) => {
     return new this.Model(data).save();
   };
-  getAll = (projection = "") => {
-    return this.Model.find().select(projection);
+  getAll = (projection = "", criteria={}) => {
+    return this.Model.find(criteria).select(projection);
   };
   getById = (id: string) => {
     return this.Model.findById(id);
