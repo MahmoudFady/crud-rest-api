@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import optionsGeneratorUtil from "../utils/generator";
+import optionsGeneratorUtil from "../utils/options-generator.util";
 const userSchema = new Schema({
   image: {
     type: String,
