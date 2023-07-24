@@ -21,22 +21,24 @@ class ServiceFactory<T extends Document | any> {
   findByPagination = async (
     query: { [k: string]: any },
     projection = "",
-    criteria = {}
+    criteria = {},
+    sortOptions: { [k: string]: any }
   ) => {
     /**
      * p => page index
      * s => limit
      * total => total documents in db
+     *
      */
     const { p = 1, s = 2 } = query;
     const total = await this.Model.countDocuments();
     const pagesCount = Math.ceil(total / s);
     const data = await this.Model.find(criteria)
+      .sort(sortOptions)
       .skip(s * (p - 1))
       .limit(s)
       .select(projection);
     return { pagesCount, data, p, s, total };
   };
-  
 }
 export default ServiceFactory;
