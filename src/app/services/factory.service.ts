@@ -21,8 +21,7 @@ class ServiceFactory<T extends Document | any> {
   findByPagination = async (
     query: { [k: string]: any },
     projection = "",
-    criteria = {},
-    sortOptions: { [k: string]: any }
+    criteria = {}
   ) => {
     /**
      * p => page index
@@ -30,8 +29,11 @@ class ServiceFactory<T extends Document | any> {
      * total => total documents in db
      *
      */
-    const { p = 1, s = 2 } = query;
-    const total = await this.Model.countDocuments();
+
+    const { p = 1, s = 2, sortBy, sortValue } = query;
+    const sortOptions = {};
+    sortOptions[sortBy] = sortValue;
+    const total = await this.Model.countDocuments(criteria);
     const pagesCount = Math.ceil(total / s);
     const data = await this.Model.find(criteria)
       .sort(sortOptions)
