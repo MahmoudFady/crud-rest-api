@@ -26,9 +26,7 @@ class ControllerFactory<T extends Document | any> {
       try {
         const result = await this.serviceFactory.findByPagination(
           req.query,
-          projection,
-          {},
-          req.body.sortOptions
+          projection
         );
         resUtil(req, res, "OK", this.successMsg, { ...result });
       } catch (err) {
