@@ -96,18 +96,21 @@ class ControllerFactory<T extends Document | any> {
     (projection = "", exceptions = []) =>
     async (req: Request, res: Response, next: NextFunction) => {
       try {
+        let modelPaths = this.Model.schema.paths;
         let criteria = {};
         for (let k in req.body) {
-          criteria[k] = new RegExp(req.body[k], "i");
-          if (exceptions.includes(k)) criteria[k] = req.body[k];
+          if (modelPaths.hasOwnProperty(k)) {
+            criteria[k] = new RegExp(req.body[k], "i");
+            if (exceptions.includes(k)) criteria[k] = req.body[k];
+          }
         }
         const result = await this.serviceFactory.findByPagination(
           req.query,
           projection,
-          {},
+          criteria,
           req.body.sortOptions
         );
-        resUtil(req, res, "OK", "done", { ...result });
+        resUtil(req, res, "OK", "search result", { ...result });
       } catch (err) {
         next(new ApiError(err.message, err.status));
       }
