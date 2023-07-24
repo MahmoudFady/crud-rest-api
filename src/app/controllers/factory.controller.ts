@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Model, Document } from "mongoose";
+import { Model, Document, Query } from "mongoose";
 import resUtil from "../utils/response.util";
 import ApiError from "../utils/error.util";
 import ServiceFactory from "../services/factory.service";
@@ -24,8 +24,11 @@ class ControllerFactory<T extends Document | any> {
     (projection = "") =>
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const data = await this.serviceFactory.getAll(projection);
-        resUtil(req, res, "OK", this.successMsg, { data });
+        const result = await this.serviceFactory.findByPagination(
+          req.query,
+          projection
+        );
+        resUtil(req, res, "OK", this.successMsg, { ...result });
       } catch (err) {
         next(new ApiError(err));
       }
@@ -96,8 +99,12 @@ class ControllerFactory<T extends Document | any> {
           criteria[k] = new RegExp(req.body[k], "i");
           if (exceptions.includes(k)) criteria[k] = req.body[k];
         }
-        const data = await this.serviceFactory.getAll(projection, criteria);
-        resUtil(req, res, "OK", "done", { data });
+        const result = await this.serviceFactory.findByPagination(
+          req.query,
+          projection,
+          criteria
+        );
+        resUtil(req, res, "OK", "done", { ...result });
       } catch (err) {
         next(new ApiError(err.message, err.status));
       }
