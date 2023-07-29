@@ -4,7 +4,7 @@ const userSchema = new Schema({
   image: {
     type: String,
     options: optionsGeneratorUtil("profile image", {
-      placeholder: "user image",
+      type: "file",
       controlType: "file",
     }),
   },

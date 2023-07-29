@@ -4,12 +4,7 @@ export default <T extends Document | any>(model: Model<T>) => {
   const schemaPaths = model.schema.paths;
   const attributes = [];
   for (const path in schemaPaths) {
-    if (
-      schemaPaths.hasOwnProperty(path) &&
-      path != "_id" &&
-      path !== "__v" &&
-      path !== "image"
-    ) {
+    if (schemaPaths.hasOwnProperty(path) && path != "_id" && path !== "__v") {
       attributes.push({
         name: path,
         type: schemaPaths[path].instance.toLocaleLowerCase(),
