@@ -24,10 +24,10 @@ class ControllerFactory<T extends Document | any> {
     (projection = "") =>
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const result = await this.serviceFactory.findByPagination(
-          req.query,
-          projection
-        );
+        const result = await this.serviceFactory.findAllBagAndSort({
+          query: req.query,
+          projection,
+        });
         resUtil(req, res, "OK", this.successMsg, { ...result });
       } catch (err) {
         next(new ApiError(err));
@@ -102,11 +102,11 @@ class ControllerFactory<T extends Document | any> {
             if (exceptions.includes(k)) criteria[k] = req.body[k];
           }
         }
-        const result = await this.serviceFactory.findByPagination(
-          req.query,
+        const result = await this.serviceFactory.findAllBagAndSort({
+          query: req.query,
           projection,
-          criteria
-        );
+          criteria,
+        });
         resUtil(req, res, "OK", "search result", { ...result });
       } catch (err) {
         next(new ApiError(err.message, err.status));

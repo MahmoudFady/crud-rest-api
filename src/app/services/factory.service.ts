@@ -1,4 +1,4 @@
-import { Model, Document, QueryOptions } from "mongoose";
+import { Model, Document, QueryOptions, FilterQuery } from "mongoose";
 class ServiceFactory<T extends Document | any> {
   constructor(private Model: Model<T>) {
     this.Model = Model;
@@ -18,18 +18,22 @@ class ServiceFactory<T extends Document | any> {
   deleteById = (id: string) => {
     return this.Model.findByIdAndDelete(id).select("_id");
   };
-  findByPagination = async (
-    query: { [k: string]: any },
-    projection = "",
-    criteria = {}
-  ) => {
+  findAllBagAndSort = async (input: {
+    query: { [k: string]: any };
+    criteria?: FilterQuery<any>;
+    projection?: string;
+  }) => {
     /**
      * p => page index
      * s => limit
      * total => total documents in db
      *
      */
-
+    const { query, criteria, projection } = {
+      criteria: {},
+      projection: "",
+      ...input,
+    };
     const { p = 1, s = 2, sort, asc = 1 } = query;
 
     const total = await this.Model.countDocuments(criteria);
