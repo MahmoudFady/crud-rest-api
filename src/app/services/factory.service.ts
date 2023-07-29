@@ -34,7 +34,7 @@ class ServiceFactory<T extends Document | any> {
       projection: "",
       ...input,
     };
-    const { p = 1, s = 2, sort } = query;
+    const { p = 1, s = 2, sort = "" } = query;
 
     const total = await this.Model.countDocuments(criteria);
     const pagesCount = Math.ceil(total / s);
