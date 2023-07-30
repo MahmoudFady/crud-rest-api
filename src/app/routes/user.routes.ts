@@ -6,11 +6,14 @@ const userCtrlFactory = new ControllerFactory(userModel);
 import fileUpload from "../middlewares/file-upload.mw";
 import * as userController from "../controllers/user.controller";
 import validationMw from "../middlewares/validation.mw";
+import roleAuthMw from "../middlewares/role-auth.mw";
 const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
   "image"
 );
 router.get("/template/form", userCtrlFactory.getFormTemplate);
-router.route("/search").post(userCtrlFactory.search("", ["gender", "ssn"]));
+router
+  .route("/search")
+  .post(roleAuthMw(), userCtrlFactory.search("", ["gender", "ssn"]));
 router.get("/options", userCtrlFactory.getOptions);
 router
   .route("/")
@@ -19,7 +22,7 @@ router
     (req, res, next) => validationMw(next, ["addUser", req.body]),
     userController.create
   )
-  .get(userCtrlFactory.getAll("image firstName"));
+  .get(roleAuthMw(), userCtrlFactory.getAll("image firstName"));
 router.patch(
   "/img-upload/:id",
   userImageMw,

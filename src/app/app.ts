@@ -6,12 +6,17 @@ import userRoutes from "./routes/user.routes";
 import postRoutes from "./routes/post.routes";
 import notFoundMw from "./middlewares/not-found.mw";
 import errorMw from "./middlewares/error.mw";
+import roleAuthMw from "./middlewares/role-auth.mw";
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(mongoSanitize());
 app.use("/uploads", express.static(path.join(__dirname, "../", "uploads")));
+app.get("/api/v1/users/search/firstName", roleAuthMw(), (req, res, next) => {
+  res.status(200).json({ mesage: req.originalUrl });
+});
+
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use(notFoundMw);
