@@ -10,11 +10,20 @@ import roleAuthMw from "../middlewares/role-auth.mw";
 const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
   "image"
 );
-router.get("/template/form", userCtrlFactory.getFormTemplate);
+
+
+
+router.use(roleAuthMw);
+
+//router.get("/template/form", userCtrlFactory.getFormTemplate);
+// 
 router
   .route("/search")
-  .post(roleAuthMw(), userCtrlFactory.search("", ["gender", "ssn"]));
+  .post(userCtrlFactory.search("", ["gender", "ssn"]));
+
 router.get("/options", userCtrlFactory.getOptions);
+
+// Parent 1 // get  post
 router
   .route("/")
   .post(
@@ -22,22 +31,28 @@ router
     (req, res, next) => validationMw(next, ["addUser", req.body]),
     userController.create
   )
-  .get(roleAuthMw(), userCtrlFactory.getAll("image firstName"));
+  .get(userCtrlFactory.getAll("image firstName"));
+
+// 2   
 router.patch(
-  "/img-upload/:id",
+  "/uploadImage/:id",
   userImageMw,
   (req, res, next) => validationMw(next, ["mongoId", req.params.id]),
   userController.updateImage
 );
 
-router
+router // 2 patch  get  delete
   .route("/:id")
-  .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]))
+  .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]),roleAuthMw)
   .get(userCtrlFactory.getById("id"))
   .patch(
     (req, res, next) => validationMw(next, ["updateUser", req.body]),
     userCtrlFactory.updateById("id")
   )
   .delete(userCtrlFactory.deleteById("id"));
+// router.get('getOne/:id' ,userCtrlFactory.getById('id') )
+// router.get('delOne/:id' ,userCtrlFactory.deleteById('id') )
+// router.get('pathOne/:id' ,userCtrlFactory.updateById('id') )
+
 
 export default router;

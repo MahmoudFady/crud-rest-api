@@ -1,9 +1,68 @@
-import { level } from "winston";
-// {role : 'admin' }
 import { Request, Response, NextFunction } from "express";
-import urlModel from "../models/url.model";
-// checkAuth(['admin' , 'teacher'] , ['','getUsers'])
-const generatePopulateOptions = (depth: number) => {
+import urlModel from "../models/asset.model";
+import ApiError from "../utils/error.util";
+import {verifyUser} from '../utils/verfy-user.util';
+import { JwtPayload } from "jsonwebtoken";
+import { getAssetMenu } from "../utils/get-asset-menu.util";
+
+
+export default async (req: Request, res: Response, next: NextFunction) => {
+  try {
+
+    const userData = await verifyUser(req) as JwtPayload;
+
+    // Attach to Request
+    req.user = {
+      role: userData.role.toLowerCase(),
+      id: userData.id,
+      auth: false
+    };
+
+
+    let url = req.baseUrl + (req.path == "/" ? "" : req.path);
+    url = url.split("v1/")[1];
+
+    for(let k in req.params){
+      url = url.replace(`/${req.params[k]}`, ''); // Replace     // url = url.replace(`/${req.params['id']}`, '');  
+    }
+
+    let data = await urlModel
+      .findOne({ url })
+      .populate(generatePopulateOptions(url.split("/").length)); // new add level for parent level -  Old =>  url.split("/").length - 1
+    
+    if (!data) throw Error("resource is not allowed");
+    
+    let pointer: any = data;
+    
+    do {
+  
+      if (
+        pointer.roles.includes(req.user.role) 
+        &&
+        (pointer.method === req.method.toLowerCase() || pointer.method === "*")
+      ) {
+        req.user.auth = true;
+        return next()
+      }
+      pointer = pointer.parent;
+    } while (pointer);
+
+
+    // attach authorization meta data to request
+    // if (req.user.auth) return next();
+    res.status(409).json({ message: "resource is not allowed" });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(409).json({ message: "resource is not allowed" })
+  }
+};
+
+
+
+
+
+function generatePopulateOptions (depth: number){
   if (depth <= 0) {
     return null;
   }
@@ -12,32 +71,6 @@ const generatePopulateOptions = (depth: number) => {
     path: "parent",
     populate: generatePopulateOptions(depth - 1),
   };
-};
-export default () =>
-  async (req: Request, res: Response, next: NextFunction) => {
-    req.user = {
-      role: "developer",
-    };
-    let cachedUsers: { [k: string]: any } = {};
-    let url = req.baseUrl + (req.path == "/" ? "" : req.path);
-    url = url.split("v1/")[1];
-    let data = await urlModel
-      .findOne({ url })
-      .populate(generatePopulateOptions(url.split("/").length - 1));
-    let pointer: any = data;
-    console.log(pointer);
-    let isAuth = false;
+}
 
-    do {
-      if (
-        pointer.roles.includes(req.user.role) &&
-        pointer.methods.includes(req.method.toLowerCase())
-      ) {
-        isAuth = true;
-      }
-      pointer = pointer.parent;
-    } while (pointer);
-    // attach authorization meta data to request
-    if (isAuth) return next();
-    else res.status(409).json({ message: "resoure does not allowed" });
-  };
+

@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import app from "./app/app";
 import mongoose from "mongoose";
+// mongoose.set('debug', true);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
