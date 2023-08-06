@@ -14,13 +14,6 @@ app.use(express.json());
 app.use(cors());
 app.use(mongoSanitize());
 app.use("/uploads", express.static(path.join(__dirname, "../", "uploads")));
-
-import assetModel from "./models/asset.model";
-
-app.post("/addToAsset", async(req, res)=>{
-  let data = await assetModel.create(req.body);
-  res.json(data);
-})
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/assets", assetRouter);

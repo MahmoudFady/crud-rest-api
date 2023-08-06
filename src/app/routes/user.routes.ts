@@ -42,7 +42,7 @@ router.patch(
 
 router // 2 patch  get  delete
   .route("/:id")
-  .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]),roleAuthMw)
+  .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]))
   .get(userCtrlFactory.getById("id"))
   .patch(
     (req, res, next) => validationMw(next, ["updateUser", req.body]),
