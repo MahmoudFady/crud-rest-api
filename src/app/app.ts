@@ -16,20 +16,11 @@ app.use(mongoSanitize());
 app.use("/uploads", express.static(path.join(__dirname, "../", "uploads")));
 
 import assetModel from "./models/asset.model";
-import { getAssetMenu } from "./utils/get-asset-menu.util";
 
 app.post("/addToAsset", async(req, res)=>{
   let data = await assetModel.create(req.body);
   res.json(data);
 })
-
-// Role Middleware
-//app.use(roleAuthMw);
-
-// app.get("/api/v1/users/search/firstName", async(req, res) => {
-//   res.send(await getAssetMenu('admin'))
-// });
-
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/assets", assetRouter);
