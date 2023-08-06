@@ -13,7 +13,6 @@ const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
 
 
 
-router.use(roleAuthMw);
 
 //router.get("/template/form", userCtrlFactory.getFormTemplate);
 // 

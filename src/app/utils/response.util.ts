@@ -11,11 +11,11 @@ export default (
 ) => {
   res.locals.message = message;
   res.locals.result = JSON.stringify(result);
-  const statusCode = httpStatusCode[status];
+  const statusCode = httpStatusCode[status] || res.statusCode;
   loggingUtil.info(
-    `${req.protocol} | ${req.method} | ${
-      res.statusCode
-    } | body : ${JSON.stringify(req.body)} |${req.originalUrl} |${message}`,
+    `${req.protocol} | ${req.method} | ${statusCode} | body : ${JSON.stringify(
+      req.body
+    )} |${req.originalUrl} |${message}`,
     result
   );
   return res.status(statusCode).json({ message, result });

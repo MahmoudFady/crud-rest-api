@@ -14,14 +14,6 @@ app.use(express.json());
 app.use(cors());
 app.use(mongoSanitize());
 app.use("/uploads", express.static(path.join(__dirname, "../", "uploads")));
-
-// Role Middleware
-//app.use(roleAuthMw);
-
-// app.get("/api/v1/users/search/firstName", async(req, res) => {
-//   res.send(await getAssetMenu('admin'))
-// });
-
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/assets", assetRouter);

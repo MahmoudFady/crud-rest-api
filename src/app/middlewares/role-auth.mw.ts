@@ -1,68 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import urlModel from "../models/asset.model";
-import ApiError from "../utils/error.util";
-import {verifyUser} from '../utils/verfy-user.util';
+import { verifyUser } from "../utils/verfy-user.util";
 import { JwtPayload } from "jsonwebtoken";
-import { getAssetMenu } from "../utils/get-asset-menu.util";
-
-
-export default async (req: Request, res: Response, next: NextFunction) => {
-  try {
-
-    const userData = await verifyUser(req) as JwtPayload;
-
-    // Attach to Request
-    req.user = {
-      role: userData.role.toLowerCase(),
-      id: userData.id,
-      auth: false
-    };
-
-
-    let url = req.baseUrl + (req.path == "/" ? "" : req.path);
-    url = url.split("v1/")[1];
-
-    for(let k in req.params){
-      url = url.replace(`/${req.params[k]}`, ''); // Replace     // url = url.replace(`/${req.params['id']}`, '');  
-    }
-
-    let data = await urlModel
-      .findOne({ url })
-      .populate(generatePopulateOptions(url.split("/").length)); // new add level for parent level -  Old =>  url.split("/").length - 1
-    
-    if (!data) throw Error("resource is not allowed");
-    
-    let pointer: any = data;
-    
-    do {
-  
-      if (
-        pointer.roles.includes(req.user.role) 
-        &&
-        (pointer.method === req.method.toLowerCase() || pointer.method === "*")
-      ) {
-        req.user.auth = true;
-        return next()
-      }
-      pointer = pointer.parent;
-    } while (pointer);
-
-
-    // attach authorization meta data to request
-    // if (req.user.auth) return next();
-    res.status(409).json({ message: "resource is not allowed" });
-
-  } catch (error) {
-    console.log(error);
-    return res.status(409).json({ message: "resource is not allowed" })
-  }
-};
-
-
-
-
-
-function generatePopulateOptions (depth: number){
+import responseUtil from "../utils/response.util";
+// populate the returned data by specific levels (number)
+const generatePopulateOptions = (depth: number) => {
   if (depth <= 0) {
     return null;
   }
@@ -71,6 +13,47 @@ function generatePopulateOptions (depth: number){
     path: "parent",
     populate: generatePopulateOptions(depth - 1),
   };
-}
-
-
+};
+// get search criteria and levels count
+const getLevelsAndCriteria = (req: Request) => {
+  let url = req.baseUrl + (req.path == "/" ? "" : req.path); // rm '/' if exist
+  url = url.split("v1/")[1]; // get url after 'v1' keyword
+  // rm value of params if it's exist
+  for (let k in req.params) {
+    url = url.replace(`/${req.params[k]}`, "");
+  }
+  const reqParams = Object.keys(req.params);
+  const criteria = reqParams.length > 0 ? { url, params: reqParams } : { url };
+  const levelsCount = url.split("/").length + reqParams.length;
+  return { criteria, levelsCount };
+};
+export default async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // decode token then extract it's values
+    const { role, id } = (await verifyUser(req)) as JwtPayload;
+    req.user = {
+      role: role.toLowerCase(),
+      id,
+      auth: false,
+    };
+    const { criteria, levelsCount } = getLevelsAndCriteria(req);
+    let data = await urlModel
+      .findOne(criteria)
+      .populate(generatePopulateOptions(levelsCount));
+    if (!data) return responseUtil(req, res, "NOT_FOUND", "No data");
+    let pointer: any = data;
+    do {
+      if (
+        pointer.roles?.includes(req.user.role) &&
+        (pointer.method === req.method.toLowerCase() || pointer.method === "*")
+      ) {
+        req.user.auth = true;
+        return next();
+      }
+      pointer = pointer.parent;
+    } while (pointer);
+    return responseUtil(req, res, "UN_AUTH", "Resource is not allowed");
+  } catch (error) {
+    return responseUtil(req, res, "INTERNAL_SER_ERR", error.message);
+  }
+};

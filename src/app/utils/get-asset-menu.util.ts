@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import responseUtil from "./response.util";
 import assetModel from "../models/asset.model";
 
-
 export async function getAssetMenu(req: Request, res: Response, next: NextFunction) {
 
     try{
