@@ -31,8 +31,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     // decode token then extract it's values
     const { role, id } = (await verifyUser(req)) as JwtPayload;
-    req.user = {
-      role: role,
+    req.user = {      role,
+
       id,
       auth: false,
     };

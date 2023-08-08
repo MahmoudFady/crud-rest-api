@@ -7,6 +7,7 @@ import fileUpload from "../middlewares/file-upload.mw";
 import * as userController from "../controllers/user.controller";
 import validationMw from "../middlewares/validation.mw";
 import roleAuthMw from "../middlewares/role-auth.mw";
+import { checkAccessRole } from "../middlewares/role-auth-check.mw";
 const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
   "image"
 );
@@ -19,7 +20,7 @@ const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
 router
   .route("/search")
   
-  .post(roleAuthMw, userCtrlFactory.search("", ["gender", "ssn"]));
+  .post(checkAccessRole, userCtrlFactory.search("", ["gender", "ssn"]));
 
 router.get("/options", userCtrlFactory.getOptions);
 
