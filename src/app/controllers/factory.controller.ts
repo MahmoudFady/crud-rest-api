@@ -95,6 +95,7 @@ class ControllerFactory<T extends Document | any> {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         let modelPaths = this.Model.schema.paths;
+        console.log(modelPaths)
         let criteria = {};
         for (let k in req.body) {
           if (modelPaths.hasOwnProperty(k)) {
