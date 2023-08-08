@@ -42,6 +42,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       .populate(generatePopulateOptions(levelsCount));
     if (!data) return responseUtil(req, res, "NOT_FOUND", "No data");
     let pointer: any = data;
+    console.log(pointer)
     do {
       if (
         pointer.roles?.includes(req.user.role) &&

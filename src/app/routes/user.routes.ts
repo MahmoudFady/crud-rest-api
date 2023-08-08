@@ -18,13 +18,15 @@ const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
 // 
 router
   .route("/search")
-  .post(userCtrlFactory.search("", ["gender", "ssn"]));
+  
+  .post(roleAuthMw, userCtrlFactory.search("", ["gender", "ssn"]));
 
 router.get("/options", userCtrlFactory.getOptions);
 
 // Parent 1 // get  post
 router
   .route("/")
+  .all(roleAuthMw)
   .post(
     userImageMw,
     (req, res, next) => validationMw(next, ["addUser", req.body]),
@@ -35,14 +37,14 @@ router
 // 2   
 router.patch(
   "/uploadImage/:id",
-  userImageMw,
+  userImageMw,roleAuthMw,
   (req, res, next) => validationMw(next, ["mongoId", req.params.id]),
   userController.updateImage
 );
 
 router // 2 patch  get  delete
   .route("/:id")
-  .all((req, res, next) => validationMw(next, ["mongoId", req.params.id]))
+  .all(roleAuthMw,(req, res, next) => validationMw(next, ["mongoId", req.params.id]))
   .get(userCtrlFactory.getById("id"))
   .patch(
     (req, res, next) => validationMw(next, ["updateUser", req.body]),

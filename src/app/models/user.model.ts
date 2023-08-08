@@ -13,7 +13,7 @@ const userSchema = new Schema({
     options: optionsGeneratorUtil("first name", {
       placeholder: "ex : mahmoud",
       validation: {
-        min: 5,
+        min: 3,
         max: 10,
       },
     }),
@@ -23,7 +23,7 @@ const userSchema = new Schema({
     options: optionsGeneratorUtil("middle name", {
       placeholder: "ex : fady",
       validation: {
-        min: 5,
+        min: 3,
         max: 10,
       },
     }),
@@ -33,7 +33,7 @@ const userSchema = new Schema({
     options: optionsGeneratorUtil("third name", {
       placeholder: "ex : ameen",
       validation: {
-        min: 2,
+        min: 3,
         max: 10,
       },
     }),
