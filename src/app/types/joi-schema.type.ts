@@ -1,2 +1,2 @@
-type joiSchema = "addUser" | "updateUser" | "mongoId" | "file";
+type joiSchema = "addUser" | "updateUser" |"addDepartment"|"updateDepartment"| "addProject"|"updateProject"|"mongoId" | "file";
 export default joiSchema;
