@@ -2,9 +2,19 @@ import { Request, Response, NextFunction } from "express";
 import responseUtil from "./response.util";
 import assetModel from "../models/asset.model";
 
+
+// Cache In Memory
+const accessCodeRepository = {};
+
 export async function getAssetMenu(req: Request, res: Response, next: NextFunction) {
 
-    try{
+    try{     
+        // Check Cache First
+        if(accessCodeRepository[req.user.id]){
+            console.log('data Cashed');
+            
+            return responseUtil(req, res,"OK", 'get all access code for role' , accessCodeRepository[req.user.id] )
+        }
 
         const assets = await assetModel.find({roles:{$in: req.user.role}}).select("assetsCodes -_id"); //  showToFront: true
 
@@ -13,6 +23,10 @@ export async function getAssetMenu(req: Request, res: Response, next: NextFuncti
         assets.forEach((item)=>{
             accessCode.push(...item.assetsCodes)
         })
+
+        // Cache data
+        accessCodeRepository[req.user.id] = accessCode;
+
         return responseUtil(req, res,"OK", 'get all access code for role' , {accessCode} )
 
     }catch(error){

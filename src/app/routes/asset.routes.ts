@@ -1,4 +1,5 @@
-import { getAssetMenu } from "../utils/get-asset-menu.util";
+//import { getAssetMenu } from "../utils/get-asset-menu.util";
+import {getAssetMenu} from "../controllers/asset.controller"
 import { Router } from "express";
 import { checkRole } from "../middlewares/check-role.mw";
 import { add } from "winston";

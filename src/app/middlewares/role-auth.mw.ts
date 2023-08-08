@@ -32,14 +32,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     // decode token then extract it's values
     const { role, id } = (await verifyUser(req)) as JwtPayload;
     req.user = {
-      role: role.toLowerCase(),
+      role,
       id,
       auth: false,
     };
     const { criteria, levelsCount } = getLevelsAndCriteria(req);
     let data = await urlModel
       .findOne(criteria)
-      .populate(generatePopulateOptions(levelsCount));
+      .populate(generatePopulateOptions(10));
     if (!data) return responseUtil(req, res, "NOT_FOUND", "No data");
     let pointer: any = data;
     console.log(pointer)

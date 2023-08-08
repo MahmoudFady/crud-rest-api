@@ -1,6 +1,9 @@
 
 import assetModel from "../models/asset.model";
 
+// Cache In Memory
+const accessCodeRepository = {};
+
 export async function addToAssetService(newAsset) {
     let data = await assetModel.create(newAsset);
     
@@ -37,4 +40,34 @@ export async function addToAssetService(newAsset) {
         status: "OK",
         data
     }
+}
+
+export async function getAssetMenuService(role:string, user_id:string) {
+          // Check Cache First
+          if(accessCodeRepository[user_id]){
+            console.log('data Cashed');
+            
+            return{
+              message: 'get all access code for role',
+              status: "OK",
+              data: accessCodeRepository[user_id]
+            }
+        }
+
+        const assets = await assetModel.find({roles:{$in: role}}).select("assetsCodes -_id"); //  showToFront: true
+
+        const accessCode = [];
+    
+        assets.forEach((item)=>{
+            accessCode.push(...item.assetsCodes)
+        })
+
+        // Cache data
+        accessCodeRepository[user_id] = accessCode;
+        return{
+          message: 'get all access code for role',
+          status: "OK",
+          data: accessCodeRepository[user_id]
+        }
+
 }
