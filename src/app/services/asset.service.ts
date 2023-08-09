@@ -1,5 +1,6 @@
 
 import assetModel from "../models/asset.model";
+import AssetCache from "../Cache/asset.cache"
 
 // Cache In Memory
 const accessCodeRepository = {};
@@ -35,6 +36,9 @@ export async function addToAssetService(newAsset) {
       {new: true}
     );
 
+    // Delete Cache
+    AssetCache.delete();
+
     return {
         message: 'A New Asset is Added Successfully.',
         status: "OK",
@@ -43,14 +47,15 @@ export async function addToAssetService(newAsset) {
 }
 
 export async function getAssetMenuService(role:string, user_id:string) {
+
           // Check Cache First
-          if(accessCodeRepository[user_id]){
+          if(AssetCache.get(user_id)){
             console.log('data Cashed');
             
             return{
               message: 'get all access code for role',
               status: "OK",
-              data: accessCodeRepository[user_id]
+              data: AssetCache.get(user_id)
             }
         }
 
@@ -63,11 +68,27 @@ export async function getAssetMenuService(role:string, user_id:string) {
         })
 
         // Cache data
-        accessCodeRepository[user_id] = accessCode;
+        AssetCache.add(user_id, accessCode)
         return{
           message: 'get all access code for role',
           status: "OK",
           data: accessCodeRepository[user_id]
         }
+}
 
+export async function getAssetMenuV2Service(role:string) {
+
+const assets = await assetModel.find({roles:{$in: role}}).select("assetsCodes -_id"); //  showToFront: true
+
+const accessCode = [];
+
+assets.forEach((item)=>{
+    accessCode.push(...item.assetsCodes)
+})
+
+return{
+  message: 'get all access code for role',
+  status: "OK",
+  data: accessCode
+};
 }
