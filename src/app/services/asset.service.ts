@@ -2,8 +2,6 @@
 import assetModel from "../models/asset.model";
 import AssetCache from "../Cache/asset.cache"
 
-// Cache In Memory
-const accessCodeRepository = {};
 
 export async function addToAssetService(newAsset) {
     let data = await assetModel.create(newAsset);
@@ -72,7 +70,7 @@ export async function getAssetMenuService(role:string, user_id:string) {
         return{
           message: 'get all access code for role',
           status: "OK",
-          data: accessCodeRepository[user_id]
+          data: accessCode
         }
 }
 

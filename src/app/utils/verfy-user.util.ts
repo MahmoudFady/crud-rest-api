@@ -8,7 +8,6 @@ export async function verifyUser(req: Request) {
   ) {
     token = req.headers["authorization"].split(" ")[1];
   }
-  console.log(token)
 
   if (!token) {
     throw Error("In-valid Token");
