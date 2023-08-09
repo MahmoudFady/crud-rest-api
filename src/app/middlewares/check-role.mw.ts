@@ -13,7 +13,7 @@ export async function checkRole(
 
     // Attach to Request
     req.user = {
-      role: userData.role.toLowerCase(),
+      role: userData.role,
       id: userData.id,
     };
 
