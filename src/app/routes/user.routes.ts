@@ -8,18 +8,17 @@ import * as userController from "../controllers/user.controller";
 import validationMw from "../middlewares/validation.mw";
 import roleAuthMw from "../middlewares/role-auth.mw";
 import { checkAccessRole } from "../middlewares/role-auth-check.mw";
-const userImageMw = fileUpload("uploads/users/", [".png", ".jpeg"]).single(
-  "image"
-);
-
-
-
+const userImageMw = fileUpload("uploads/users/", [
+  ".png",
+  ".jpeg",
+  ".jpg",
+]).single("image");
 
 //router.get("/template/form", userCtrlFactory.getFormTemplate);
-// 
+//
 router
   .route("/search")
-  
+
   .post(checkAccessRole, userCtrlFactory.search("", ["gender", "ssn"]));
 
 router.get("/options", userCtrlFactory.getOptions);
@@ -35,17 +34,20 @@ router
   )
   .get(userCtrlFactory.getAll("image firstName"));
 
-// 2   
+// 2
 router.patch(
   "/uploadImage/:id",
-  userImageMw,roleAuthMw,
+  userImageMw,
+  roleAuthMw,
   (req, res, next) => validationMw(next, ["mongoId", req.params.id]),
   userController.updateImage
 );
 
 router // 2 patch  get  delete
   .route("/:id")
-  .all(roleAuthMw,(req, res, next) => validationMw(next, ["mongoId", req.params.id]))
+  .all(roleAuthMw, (req, res, next) =>
+    validationMw(next, ["mongoId", req.params.id])
+  )
   .get(userCtrlFactory.getById("id"))
   .patch(
     (req, res, next) => validationMw(next, ["updateUser", req.body]),
@@ -55,6 +57,5 @@ router // 2 patch  get  delete
 // router.get('getOne/:id' ,userCtrlFactory.getById('id') )
 // router.get('delOne/:id' ,userCtrlFactory.deleteById('id') )
 // router.get('pathOne/:id' ,userCtrlFactory.updateById('id') )
-
 
 export default router;

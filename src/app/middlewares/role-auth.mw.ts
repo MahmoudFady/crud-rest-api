@@ -23,7 +23,10 @@ const getLevelsAndCriteria = (req: Request) => {
     url = url.replace(`/${req.params[k]}`, "");
   }
   const reqParams = Object.keys(req.params);
-  const criteria = reqParams.length > 0 ? { url, params: reqParams } : { url };
+  const criteria =
+    reqParams.length > 0
+      ? { url, params: reqParams, method: req.method.toLocaleLowerCase() }
+      : { url };
   const levelsCount = url.split("/").length + reqParams.length;
   return { criteria, levelsCount };
 };
@@ -31,8 +34,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     // decode token then extract it's values
     const { role, id } = (await verifyUser(req)) as JwtPayload;
-    req.user = {      role,
-
+    req.user = {
+      role,
       id,
       auth: false,
     };
@@ -42,7 +45,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       .populate(generatePopulateOptions(10));
     if (!data) return responseUtil(req, res, "NOT_FOUND", "No data");
     let pointer: any = data;
-    console.log(pointer)
+    console.log(pointer);
     do {
       if (
         pointer.roles?.includes(req.user.role) &&

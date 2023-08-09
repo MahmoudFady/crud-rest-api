@@ -26,7 +26,7 @@ const fileUpload = (
   ) => {
     const ext = path.extname(file.originalname);
     if (exts.includes(ext)) return cb(null, true);
-    cb(new ApiError("file upload faild , invalid extention", 442));
+    cb(new ApiError("file upload failed , invalid extention", 442));
   };
   return multer({ storage, fileFilter, limits: { fileSize } });
 };
