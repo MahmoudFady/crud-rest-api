@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Model, Document, Query } from "mongoose";
+import { Model, Document } from "mongoose";
 import resUtil from "../utils/response.util";
 import ApiError from "../utils/error.util";
 import ServiceFactory from "../services/factory.service";
@@ -14,8 +14,7 @@ class ControllerFactory<T extends Document | any> {
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = await this.serviceFactory.create(req.body);
-      resUtil(req, res, "OK", "created", { data });
-      res.status(200).json({ message: "saved" });
+      return resUtil(req, res, "OK", "created", { data });
     } catch (err) {
       next(new ApiError(err.message, err.statusCode));
     }
@@ -28,7 +27,7 @@ class ControllerFactory<T extends Document | any> {
           query: req.query,
           projection,
         });
-        resUtil(req, res, "OK", this.successMsg, { ...result });
+        return resUtil(req, res, "OK", this.successMsg, { ...result });
       } catch (err) {
         next(new ApiError(err));
       }
@@ -39,7 +38,7 @@ class ControllerFactory<T extends Document | any> {
       try {
         const data = await this.serviceFactory.getById(req.params[paramName]);
         if (!data) resUtil(req, res, "NOT_FOUND", this.noDataMsg);
-        resUtil(req, res, "OK", this.successMsg, { data });
+        return resUtil(req, res, "OK", this.successMsg, { data });
       } catch (err) {
         next(new ApiError(err.message));
       }
@@ -53,7 +52,7 @@ class ControllerFactory<T extends Document | any> {
           req.body
         );
         if (!data) resUtil(req, res, "NOT_FOUND", this.noDataMsg);
-        resUtil(req, res, "OK", "data updated successfully", {
+        return resUtil(req, res, "OK", "data updated successfully", {
           data: req.body,
         });
       } catch (err) {
@@ -68,7 +67,7 @@ class ControllerFactory<T extends Document | any> {
           req.params[paramName]
         );
         if (!result) resUtil(req, res, "NOT_FOUND", this.noDataMsg);
-        resUtil(req, res, "OK", "data deleted successfully");
+        return resUtil(req, res, "OK", "data deleted successfully");
       } catch (err) {
         next(new ApiError(err.message));
       }
@@ -87,7 +86,9 @@ class ControllerFactory<T extends Document | any> {
           return fields.includes(field.name);
         })
       : this.getModelFields();
-    resUtil(req, res, "OK", "entity template form", { fields: attributes });
+    return resUtil(req, res, "OK", "entity template form", {
+      fields: attributes,
+    });
   };
 
   search =
@@ -95,7 +96,6 @@ class ControllerFactory<T extends Document | any> {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         let modelPaths = this.Model.schema.paths;
-        console.log(modelPaths)
         let criteria = {};
         for (let k in req.body) {
           if (modelPaths.hasOwnProperty(k)) {
@@ -108,7 +108,7 @@ class ControllerFactory<T extends Document | any> {
           projection,
           criteria,
         });
-        resUtil(req, res, "OK", "search result", { ...result });
+        return resUtil(req, res, "OK", "search result", { ...result });
       } catch (err) {
         next(new ApiError(err.message, err.status));
       }
