@@ -10,7 +10,7 @@ export class ApiDsl {
     return new ApiDsl(expressApp);
   }
   listen(port: number) {
-    console.log("server is running ", port);
+    console.log("api dsl server is running ", port);
     this.expressApp.listen(port);
     return this;
   }
